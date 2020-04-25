@@ -5,13 +5,20 @@ const morgan = require('morgan');
 const app = express();
 const colors = require('colors');
 
+//
+// ─── UTILS ──────────────────────────────────────────────────────────────────────
+//
+const formattedLog = require('./utils/formatted-log');
+// ────────────────────────────────────────────────────────────────────────────────
+
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
-	console.log(`The server is currently running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold);
+	formattedLog.information(`The server is currently running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+	//console.log(`The server is currently running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold);
 });
 
 // Handle unhandled promise rejections
