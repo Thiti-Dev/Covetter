@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   createStackNavigator,
-  TransitionPresets,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Register from './src/components/register/firstScreen';
