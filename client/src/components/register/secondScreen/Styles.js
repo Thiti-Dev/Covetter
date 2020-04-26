@@ -73,6 +73,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
   },
+
+  checkboxViewStyle: {
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+
+  checkboxStyle: {
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0)',
+    borderWidth: 0,
+  },
+
+  formButtonInOverlalyStyle: {
+    width: '100%',
+    backgroundColor: '#ededed',
+  },
+
+  buttonInOverlay: {width: '100%', backgroundColor: '#3d3d3d'},
 });
 
 export default styles;
