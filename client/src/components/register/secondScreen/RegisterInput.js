@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faUserAlt, faPhone} from '@fortawesome/free-solid-svg-icons';
 import styles from './Styles';
 import {Button} from '@ant-design/react-native';
-import {CheckBox, Icon} from 'react-native-elements';
+import {CheckBox, Overlay} from 'react-native-elements';
+import RegisterAgreement from './RegisterAgreement';
 
 const formInputDetail = [
   {key: 'firstName', iconName: faUserAlt, placeholder: 'Firstname'},
@@ -22,17 +23,30 @@ const mapFormInputDetail = formInputDetail.map(res => {
 });
 
 const RegisterInput = () => {
+  const [isCheck, setCheck] = useState(false);
+  const [isVisibleOverlay, setVisibleOverlay] = useState(false);
   return (
     <View style={styles.input}>
       {mapFormInputDetail}
-      <CheckBox
-        center
-        title="Click Here"
-        checkedIcon="dot-circle-o"
-        uncheckedIcon="circle-o"
-      />
+      <View style={styles.checkboxViewStyle}>
+        <CheckBox
+          center
+          containerStyle={styles.checkboxStyle}
+          title="Agreement & Terms"
+          checkedIcon="dot-circle-o"
+          uncheckedIcon="circle-o"
+          checked={isCheck}
+          onPress={() => {
+            setVisibleOverlay(true);
+          }}
+        />
+        <Overlay isVisible={isVisibleOverlay}>
+          {RegisterAgreement(isCheck, setCheck, setVisibleOverlay)}
+        </Overlay>
+      </View>
+
       <View style={styles.buttonFormInput}>
-        <Button style={styles.buttonInput}>
+        <Button style={styles.buttonInput} onPress={() => console.log(isCheck)}>
           <Text style={styles.buttonTextInput}>Create account</Text>
         </Button>
       </View>
