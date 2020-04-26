@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faUserAlt, faPhone} from '@fortawesome/free-solid-svg-icons';
 import styles from './Styles';
 import {Button} from '@ant-design/react-native';
+import {CheckBox, Icon} from 'react-native-elements';
 
 const formInputDetail = [
   {key: 'firstName', iconName: faUserAlt, placeholder: 'Firstname'},
@@ -24,6 +25,12 @@ const RegisterInput = () => {
   return (
     <View style={styles.input}>
       {mapFormInputDetail}
+      <CheckBox
+        center
+        title="Click Here"
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+      />
       <View style={styles.buttonFormInput}>
         <Button style={styles.buttonInput}>
           <Text style={styles.buttonTextInput}>Create account</Text>
