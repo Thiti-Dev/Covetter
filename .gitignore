@@ -1,0 +1,3 @@
+/node_modules
+/config/*.env
+/config/covetter-service-firebase.json
