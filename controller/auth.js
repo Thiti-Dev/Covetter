@@ -1,6 +1,12 @@
-const admin = require('../utils/firebase/firebase-service');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+
+//
+// ─── FIREBASE DB ────────────────────────────────────────────────────────────────
+//
+const admin = require('../utils/firebase/firebase-service');
+const db = admin.firestore();
+// ────────────────────────────────────────────────────────────────────────────────
 
 //
 // ─── VALIDATION ─────────────────────────────────────────────────────────────────
@@ -8,8 +14,19 @@ const ErrorResponse = require('../utils/errorResponse');
 const validateRegister = require('../utils/validations/register');
 // ────────────────────────────────────────────────────────────────────────────────
 
+//
+// ─── FUNCTION ───────────────────────────────────────────────────────────────────
+//
+const firestore_register_user_from_uid = (uid, credentials) => {
+	return new Promise((resolve, reject) => {
+		let docRef = db.collection('users').doc(uid);
+		docRef.set(credentials).then(resolve).catch(reject);
+	});
+};
+// ────────────────────────────────────────────────────────────────────────────────
+
 exports.register = asyncHandler(async (req, res, next) => {
-	const { email, password, confirmPassword } = req.body;
+	const { email, password, confirmPassword, firstName, lastName, phone } = req.body;
 	const { isError, errors } = validateRegister(req.body);
 
 	if (isError) {
@@ -19,5 +36,6 @@ exports.register = asyncHandler(async (req, res, next) => {
 		email,
 		password
 	});
+	const res_registeredData = await firestore_register_user_from_uid(user.uid, { firstName, lastName, phone });
 	res.status(201).json({ sucess: true, data: user });
 });
