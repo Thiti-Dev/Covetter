@@ -18,9 +18,18 @@ const errorHandler = (err, req, res, next) => {
 	//
 	// ─── FIREBASE AUTH ──────────────────────────────────────────────────────────────
 	//
-	if (err.errorInfo.code === 'auth/email-already-exists') {
+	if (err.errorInfo && err.errorInfo.code === 'auth/email-already-exists') {
 		const message = 'This email is already existed';
 		error = new ErrorResponse(message, 400);
+	}
+	// ────────────────────────────────────────────────────────────────────────────────
+
+	//
+	// ─── VALIDATION ERROR ───────────────────────────────────────────────────────────
+	//
+	if (error.validateErrors) {
+		//error.statusCode = 400;
+		error.message = error.validateErrors;
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
 
