@@ -4,8 +4,7 @@ import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import Register from './src/components/register/firstScreen';
-import RegisterII from './src/components/register/secondScreen';
+import Register from './src/components/register';
 
 const Stack = createStackNavigator();
 
@@ -39,11 +38,6 @@ export default class App extends Component {
           <Stack.Screen
             name="RegisterFirstScreen"
             component={Register}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="RegisterSeccondScreen"
-            component={RegisterII}
             options={{headerShown: false}}
           />
         </Stack.Navigator>
