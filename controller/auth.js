@@ -25,6 +25,9 @@ const firestore_register_user_from_uid = (uid, credentials) => {
 };
 // ────────────────────────────────────────────────────────────────────────────────
 
+// @desc    Register user
+// @route   POST /api/auth/register
+// @acess   Public
 exports.register = asyncHandler(async (req, res, next) => {
 	const { email, password, confirmPassword, firstName, lastName, phone } = req.body;
 	const { isError, errors } = validateRegister(req.body);
