@@ -1,18 +1,13 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styles from './Styles';
-import {Button} from '@ant-design/react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDoubleLeft} from '@fortawesome/free-solid-svg-icons';
-import {useNavigation} from '@react-navigation/native';
 
-const RegisterHeader = () => {
-  const navigation = useNavigation();
+const RegisterHeader = ({set_step}) => {
   return (
     <View style={styles.header}>
-      <View
-        style={styles.headerButton}
-        onTouchStart={() => navigation.goBack()}>
+      <View style={styles.headerButton} onTouchStart={() => set_step(0)}>
         <FontAwesomeIcon size={30} icon={faAngleDoubleLeft} />
         <Text style={styles.headerText}>Back</Text>
       </View>

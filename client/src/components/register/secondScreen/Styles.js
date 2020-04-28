@@ -57,6 +57,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  textInputError: {
+    color: 'red',
+  },
+
   buttonFormInput: {
     flexDirection: 'row',
     alignItems: 'center',

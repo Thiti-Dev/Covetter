@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styles from './Styles';
-import {Button} from '@ant-design/react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDoubleLeft} from '@fortawesome/free-solid-svg-icons';
 
