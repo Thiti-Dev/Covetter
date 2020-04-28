@@ -16,6 +16,11 @@ const required_field = [
 		name: 'confirmPassword',
 		matchWith: 'password',
 		required: true
+	},
+	{
+		name: 'phone',
+		fixLength: [ 10, 'Invalid phone number' ],
+		required: true
 	}
 ];
 
