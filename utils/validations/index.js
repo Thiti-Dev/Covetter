@@ -45,6 +45,16 @@ exports.validate = (_require_fields, req_body) => {
 					errors[field.name] = `Invalid email format`;
 				}
 			}
+			if (field.fixLength) {
+				// if the argument contains custom error msg
+				if (Array.isArray(field.fixLength)) {
+					if (req_body[field.name].length !== field.fixLength[0]) {
+						errors[field.name] = field.fixLength[1];
+					}
+				} else {
+					errors[field.name] = `${field.name} must have ${field.fixLength} characters`;
+				}
+			}
 		}
 	}
 	return { isError: !_.isEmpty(errors), errors };
