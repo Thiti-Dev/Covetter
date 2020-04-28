@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 const colors = require('colors');
 
+const errorHandler = require('./middleware/error');
 //
 // ─── UTILS ──────────────────────────────────────────────────────────────────────
 //
@@ -13,6 +14,25 @@ const formattedLog = require('./utils/formatted-log');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
+
+//
+// ─── MIDDLEWARE ─────────────────────────────────────────────────────────────────
+//
+app.use(express.json());
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
+// ─── ROUTES ─────────────────────────────────────────────────────────────────────
+//
+const auth = require('./routes/api/auth');
+
+app.use('/api/auth', auth);
+// ────────────────────────────────────────────────────────────────────────────────
+//
+// ─── CUSTOM ERROR HANDLER ───────────────────────────────────────────────────────
+//
+app.use(errorHandler);
+// ────────────────────────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 5000;
 
