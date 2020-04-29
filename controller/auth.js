@@ -1,3 +1,5 @@
+const axios = require('axios');
+const rp = require('request-promise');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 
@@ -36,4 +38,23 @@ exports.register = asyncHandler(async (req, res, next) => {
 	});
 	const res_registeredData = await firestore_register_user_from_uid(user.uid, { firstName, lastName, phone });
 	res.status(201).json({ sucess: true, data: user });
+});
+
+// @desc    Virtual a login from uid ( returning token for testing )
+// @route   POST /api/auth/_login
+// @acess   Private/Localhost
+exports.virtualLogin = asyncHandler(async (req, res, next) => {
+	const { uid } = req.body;
+	const customToken = await admin.auth().createCustomToken(uid);
+	const _res = await rp({
+		url: `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyCustomToken?key=${process.env
+			.FIREBASE_API_KEY}`,
+		method: 'POST',
+		body: {
+			token: customToken,
+			returnSecureToken: true
+		},
+		json: true
+	});
+	res.status(200).json({ sucess: true, token: _res.idToken });
 });
