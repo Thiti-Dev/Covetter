@@ -5,6 +5,8 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack';
 import Register from './src/components/register';
+import Landing from './src/components/landing/Landing';
+import Login from './src/components/login/Login';
 
 const Stack = createStackNavigator();
 
@@ -25,7 +27,7 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="RegisterFirstScreen"
+          initialRouteName="LandingScreen"
           screenOptions={{
             gestureEnabled: true,
             gestureDirection: 'horizontal',
@@ -35,6 +37,16 @@ export default class App extends Component {
               close: config,
             },
           }}>
+          <Stack.Screen
+            name="LandingScreen"
+            component={Landing}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="LoginScreen"
+            component={Login}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="RegisterFirstScreen"
             component={Register}
