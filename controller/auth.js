@@ -61,7 +61,7 @@ exports.virtualLogin = asyncHandler(async (req, res, next) => {
 
 // @desc    Get user credentials ( profile data)
 // @route   GET /api/auth
-// @acess   Public
+// @acess   Private
 exports.getUserProfileData = asyncHandler(async (req, res, next) => {
 	let userRef = db.collection('users').doc(req.user);
 	const _res = await userRef.get();
@@ -70,4 +70,19 @@ exports.getUserProfileData = asyncHandler(async (req, res, next) => {
 	}
 	const user_data = _res.data();
 	res.status(200).json({ success: true, data: user_data });
+});
+
+// @desc    Update user credentials ( update profile data)
+// @route   PUT /api/auth
+// @acess   Private
+exports.updateUserProfileData = asyncHandler(async (req, res, next) => {
+	let userRef = db.collection('users').doc(req.user);
+	const _res = await userRef.get();
+	if (!_res.exists) {
+		return next(new ErrorResponse(`This user isn't exist on the database`, 404));
+	}
+	const updateData = req.body;
+	// @TODO will do some field avoidance
+	const _res_update = await userRef.update(updateData);
+	res.status(200).json({ success: true, data: _res_update });
 });
