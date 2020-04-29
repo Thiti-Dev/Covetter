@@ -21,7 +21,6 @@ const Register = () => {
   // ─── CALL BACK ──────────────────────────────────────────────────────────────────
   //
   const mergeCredentials = data => {
-    console.log(data);
     setCredential(prevState => {
       return {...prevState, ...data};
     });
