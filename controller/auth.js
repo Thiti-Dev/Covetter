@@ -30,11 +30,6 @@ const firestore_register_user_from_uid = (uid, credentials) => {
 // @acess   Public
 exports.register = asyncHandler(async (req, res, next) => {
 	const { email, password, confirmPassword, firstName, lastName, phone } = req.body;
-	const { isError, errors } = validateRegister(req.body);
-
-	if (isError) {
-		return next(new ErrorResponse(`Validation Error`, 400, errors));
-	}
 	const user = await admin.auth().createUser({
 		email,
 		password
