@@ -13,7 +13,8 @@ exports.protect = asyncHandler((req, res, next) => {
 		admin
 			.auth()
 			.verifyIdToken(req.headers.authorization)
-			.then(() => {
+			.then((userInfo) => {
+				req.user = userInfo.uid;
 				next();
 			})
 			.catch(() => {
