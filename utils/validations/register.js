@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const ErrorResponse = require('../errorResponse');
 const { validate } = require('../validations');
 
 const required_field = [
@@ -24,6 +24,11 @@ const required_field = [
 	}
 ];
 
-module.exports = (req_body) => {
-	return validate(required_field, req_body);
+module.exports = (req, res, next) => {
+	const { isError, errors } = validate(required_field, req.body);
+
+	if (isError) {
+		return next(new ErrorResponse(`Validation Error`, 400, errors));
+	}
+	next();
 };
