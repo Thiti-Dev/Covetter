@@ -8,12 +8,21 @@ const ErrorResponse = require('../utils/errorResponse');
 //
 const admin = require('../utils/firebase/firebase-service');
 const db = admin.firestore();
+
+// FUNC
+const fieldValue = admin.firestore.FieldValue;
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
 // ─── VALIDATION ─────────────────────────────────────────────────────────────────
 //
 const validateRegister = require('../utils/validations/register');
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
+// ─── UTIL ───────────────────────────────────────────────────────────────────────
+//
+let objKeyFilter = require('../utils/objectKeyFilter');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
@@ -81,8 +90,8 @@ exports.updateUserProfileData = asyncHandler(async (req, res, next) => {
 	if (!_res.exists) {
 		return next(new ErrorResponse(`This user isn't exist on the database`, 404));
 	}
-	const updateData = req.body;
-	// @TODO will do some field avoidance
-	const _res_update = await userRef.update(updateData);
+	// Field Avoidance
+	const finalized_update_data = objKeyFilter(req.body, [ 'firstName', 'lastName', 'phone' ]);
+	const _res_update = await userRef.update(finalized_update_data);
 	res.status(200).json({ success: true, data: _res_update });
 });
