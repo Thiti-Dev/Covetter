@@ -8,12 +8,21 @@ const ErrorResponse = require('../utils/errorResponse');
 //
 const admin = require('../utils/firebase/firebase-service');
 const db = admin.firestore();
+
+// FUNC
+const fieldValue = admin.firestore.FieldValue;
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
 // ─── VALIDATION ─────────────────────────────────────────────────────────────────
 //
 const validateRegister = require('../utils/validations/register');
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
+// ─── UTIL ───────────────────────────────────────────────────────────────────────
+//
+let objKeyFilter = require('../utils/objectKeyFilter');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
@@ -57,4 +66,32 @@ exports.virtualLogin = asyncHandler(async (req, res, next) => {
 		json: true
 	});
 	res.status(200).json({ sucess: true, token: _res.idToken });
+});
+
+// @desc    Get user credentials ( profile data)
+// @route   GET /api/auth
+// @acess   Private
+exports.getUserProfileData = asyncHandler(async (req, res, next) => {
+	let userRef = db.collection('users').doc(req.user);
+	const _res = await userRef.get();
+	if (!_res.exists) {
+		return next(new ErrorResponse(`This user isn't exist on the database`, 404));
+	}
+	const user_data = _res.data();
+	res.status(200).json({ success: true, data: user_data });
+});
+
+// @desc    Update user credentials ( update profile data)
+// @route   PUT /api/auth
+// @acess   Private
+exports.updateUserProfileData = asyncHandler(async (req, res, next) => {
+	let userRef = db.collection('users').doc(req.user);
+	const _res = await userRef.get();
+	if (!_res.exists) {
+		return next(new ErrorResponse(`This user isn't exist on the database`, 404));
+	}
+	// Field Avoidance
+	const finalized_update_data = objKeyFilter(req.body, [ 'firstName', 'lastName', 'phone' ]);
+	const _res_update = await userRef.update(finalized_update_data);
+	res.status(200).json({ success: true, data: _res_update });
 });
