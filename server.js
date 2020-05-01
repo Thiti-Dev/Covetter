@@ -1,4 +1,5 @@
 const path = require('path');
+var cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -15,9 +16,17 @@ const formattedLog = require('./utils/formatted-log');
 // Load env vars
 dotenv.config({ path: './config/config.env' });
 
+app.use(
+	cors({
+		preflightContinue: true,
+		credentials: true
+	})
+);
+
 //
 // ─── MIDDLEWARE ─────────────────────────────────────────────────────────────────
 //
+app.use(morgan('dev'));
 app.use(express.json());
 // ────────────────────────────────────────────────────────────────────────────────
 
