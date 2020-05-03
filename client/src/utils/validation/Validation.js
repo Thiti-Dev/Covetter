@@ -13,6 +13,10 @@ const Validation = credentials => {
     if (credentials.password !== credentials.confirmPassword) {
       errors.confirmPassword = 'Confirm password not match';
     }
+    if (key === 'password') {
+      if (credentials[key].length <= 6)
+        errors.password = 'Password must more than 6 characters';
+    }
     if (key === 'phone') {
       if (credentials[key].length !== 10) errors.phone = 'Invalid phone number';
       if (!pattern_num.test(credentials[key]))
