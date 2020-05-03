@@ -2,8 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import RegisterI from './firstScreen/RegisterI';
 import RegisterII from './secondScreen/RegisterII';
+import Axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
 
 const Register = () => {
+  const navigation = useNavigation();
   const [credentials, setCredential] = useState({
     email: '',
     password: '',
@@ -11,19 +14,33 @@ const Register = () => {
     firstName: '',
     lastName: '',
     phone: '',
+    state: false,
   });
 
   useEffect(() => {
-    console.log(credentials);
+    if (credentials.state === true)
+      Axios.post(
+        ' https://covetter-api.herokuapp.com/api/auth/register',
+        credentials,
+      )
+        .then(res => navigation.navigate('LandingScreen'))
+        .catch(err => {
+          console.log(err);
+        });
   }, [credentials]);
 
   //
   // ─── CALL BACK ──────────────────────────────────────────────────────────────────
   //
-  const mergeCredentials = data => {
-    setCredential(prevState => {
-      return {...prevState, ...data};
-    });
+  const mergeCredentials = (data, bool) => {
+    if (!bool)
+      setCredential(prevState => {
+        return {...prevState, ...data};
+      });
+    if (bool)
+      setCredential(prevState => {
+        return {...prevState, ...data, state: true};
+      });
   };
   // ─────────────────────────────────────────────────────────────────
 

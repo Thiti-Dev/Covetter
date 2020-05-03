@@ -25,7 +25,7 @@ const RegisterInput = ({merge_function}) => {
     setErrors({});
     let isErrors = Validation(credentials);
     if (isErrors === false) {
-      merge_function(credentials);
+      merge_function(credentials, true);
     } else {
       setErrors(isErrors);
     }
