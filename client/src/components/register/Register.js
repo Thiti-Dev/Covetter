@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import RegisterI from './firstScreen/RegisterI';
 import RegisterII from './secondScreen/RegisterII';
 import Axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
+import {Button, Overlay} from 'react-native-elements';
 
 const Register = () => {
   const navigation = useNavigation();
@@ -17,15 +18,25 @@ const Register = () => {
     state: false,
   });
 
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      '',
+      '✉️ This email already used',
+      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      {cancelable: false},
+    );
+
   useEffect(() => {
     if (credentials.state === true)
       Axios.post(
         ' https://covetter-api.herokuapp.com/api/auth/register',
         credentials,
       )
-        .then(res => navigation.navigate('LandingScreen'))
+        .then(res => {
+          navigation.navigate('LandingScreen');
+        })
         .catch(err => {
-          console.log(err);
+          createTwoButtonAlert();
         });
   }, [credentials]);
 
