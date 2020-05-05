@@ -35,8 +35,10 @@ app.use(express.json());
 //
 const auth = require('./routes/api/auth');
 const covid = require('./routes/api/covid');
+const news = require('./routes/api/news');
 app.use('/api/auth', auth);
 app.use('/api/covid', covid);
+app.use('/api/news', news);
 // ────────────────────────────────────────────────────────────────────────────────
 //
 // ─── CUSTOM ERROR HANDLER ───────────────────────────────────────────────────────
