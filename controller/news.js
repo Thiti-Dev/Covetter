@@ -3,6 +3,8 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const newsapi = require('../utils/news_api');
 
+const formattedLog = require('../utils/formatted-log');
+
 //
 // ─── FIREBASE DB ────────────────────────────────────────────────────────────────
 //
@@ -79,3 +81,12 @@ exports.getSupportedNews = asyncHandler(async (req, res, next) => {
 		}
 	});
 });
+
+//
+// ─── VIRTUAL INTERVAL TASK ──────────────────────────────────────────────────────
+//
+setInterval(async () => {
+	const _res = await fetch_news_and_store_to_firestore();
+	formattedLog.task('News-fetching', `Added total ${_res.length} news`);
+}, 3600000);
+// ────────────────────────────────────────────────────────────────────────────────
