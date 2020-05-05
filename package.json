@@ -17,6 +17,7 @@
 		"firebase-admin": "^8.11.0",
 		"lodash": "^4.17.15",
 		"morgan": "^1.10.0",
+		"newsapi": "^2.4.0",
 		"request": "^2.88.2",
 		"request-promise": "^4.2.5"
 	},
