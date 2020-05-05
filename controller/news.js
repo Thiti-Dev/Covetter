@@ -1,3 +1,6 @@
+const fs = require('fs');
+const moment = require('moment');
+
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 
@@ -60,11 +63,46 @@ const fetch_news_and_store_to_firestore = async () => {
 	// Check if the staged_news is empty => skipping the addMultipleDoc phase
 	if (staged_news.length === 0) {
 		console.log('[WARNING]: Our firestore database is already containing the lastest of news-content');
+		fs.writeFileSync('news-task-timestamp.stamp', new Date());
 		return [];
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
 	const _res = await addMultipleDocFromData(staged_news, 'news'); // Add multiple docs from array_object_data
+	fs.writeFileSync('news-task-timestamp.stamp', new Date());
 	return _res;
+};
+
+// @type asynchronize function
+// @desc Check if should fetching the news from the timestamp
+// @case Using after server is just initialized
+const fetch_news_after_the_server_just_been_initialized = async () => {
+	try {
+		var time_txt = fs.readFileSync('news-task-timestamp.stamp', 'utf8');
+		let last_stamp = new Date(time_txt);
+		if (last_stamp instanceof Date) {
+			var now = moment(); //todays date
+			var end = moment(last_stamp); // another date
+			var duration = moment.duration(now.diff(end));
+			var minutes = duration.asMinutes();
+
+			// If a hour has passed
+			if (minutes >= 60) {
+				const _res = await fetch_news_and_store_to_firestore();
+				formattedLog.task('News-fetching', `Added total ${_res.length} news (Modified existing timestap)`);
+			} else {
+				formattedLog.task(
+					'News-fetching',
+					`No need the fetch the new ( last fetching was ${minutes} minutes ago)`
+				);
+			}
+		}
+	} catch (error) {
+		if (error.errno === -4058) {
+			console.log('[news-task]: time stamp has not been created yet');
+			const _res = await fetch_news_and_store_to_firestore();
+			formattedLog.task('News-fetching', `Added total ${_res.length} news (Initialized timestap)`);
+		}
+	}
 };
 // ────────────────────────────────────────────────────────────────────────────────
 
@@ -89,4 +127,15 @@ setInterval(async () => {
 	const _res = await fetch_news_and_store_to_firestore();
 	formattedLog.task('News-fetching', `Added total ${_res.length} news`);
 }, 3600000);
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
+// ─── AFTER SERVER INITIALIZED ───────────────────────────────────────────────────
+//
+
+// 5 seconds wait for everything to get load on stage
+setTimeout(() => {
+	fetch_news_after_the_server_just_been_initialized();
+}, 5000);
+
 // ────────────────────────────────────────────────────────────────────────────────
