@@ -120,6 +120,22 @@ exports.getSupportedNews = asyncHandler(async (req, res, next) => {
 	});
 });
 
+// @desc    Get the covid related news on firestore datbase
+// @route   GET /api/news
+// @acess   Public
+exports.getNews = asyncHandler(async (req, res, next) => {
+	const _res = await db.collection('news').orderBy('publishedAt', 'desc').limit(50).get();
+	const contents = _res.docs.map((doc) => {
+		const docData = doc.data();
+		docData.id = doc.id; // assign the id of every docs
+		return docData;
+	});
+	res.status(200).json({
+		success: true,
+		data: contents
+	});
+});
+
 //
 // ─── VIRTUAL INTERVAL TASK ──────────────────────────────────────────────────────
 //
