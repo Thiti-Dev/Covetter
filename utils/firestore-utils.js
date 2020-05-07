@@ -10,3 +10,14 @@ exports.addMultipleDocFromData = async (data, collection_name) => {
 
 	return await batch.commit();
 };
+
+exports.getAllDataFromCollection = async (collection_name) => {
+	let collectionRef = db.collection(collection_name);
+	const _res = await collectionRef.get();
+	const _data = _res.docs.map((doc) => {
+		const docData = doc.data();
+		docData.id = doc.id; // assign the id of every docs
+		return docData;
+	});
+	return _data;
+};
