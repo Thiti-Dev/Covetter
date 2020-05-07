@@ -52,6 +52,27 @@ exports.answerRoutineQuiz = asyncHandler(async (req, res, next) => {
 	}
 	quiz_data = _data.first();
 
+	// Answer Validation
+	const quiz_type_str = [];
+	quiz_type_str[0] = 'boolean';
+	quiz_type_str[1] = 'string';
+	quiz_type_str[2] = 'number';
+	quiz_type_str[3] = 'string';
+	const asnwer_type = typeof answer;
+	if (
+		(quiz_data.quiz_type === 0 && asnwer_type !== 'boolean') ||
+		(quiz_data.quiz_type === 1 && asnwer_type !== 'string') ||
+		(quiz_data.quiz_type === 2 && asnwer_type !== 'number') ||
+		(quiz_data.quiz_type === 3 && asnwer_type !== 'string')
+	) {
+		return next(
+			new ErrorResponse(
+				`The answer of quiz_id:${quiz_id} should has type of ${quiz_type_str[quiz_data.quiz_type]}`,
+				400
+			)
+		);
+	}
+
 	const _res = await db.collection('users').doc(req.user).collection('routine_answers').add({
 		quiz_id: quiz_id,
 		quiz_answer: answer
