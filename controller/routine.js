@@ -14,7 +14,11 @@ const db = admin.firestore();
 //
 // ─── FIRESTORE UTILS ────────────────────────────────────────────────────────────
 //
-const { getAllDataFromCollection, getDataFromCollection } = require('../utils/firestore-utils');
+const {
+	getAllDataFromCollection,
+	getDataFromCollection,
+	extractDataFromCollectionToObjWithKeyReady
+} = require('../utils/firestore-utils');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
@@ -79,4 +83,19 @@ exports.answerRoutineQuiz = asyncHandler(async (req, res, next) => {
 	});
 
 	res.status(200).json({ sucess: true, data: _res.id });
+});
+
+// @desc    Get all of the routine quizes in the firestore database
+// @route   GET /api/routine/selfanswer
+// @acess   Private
+exports.getAllUserAnswerQuiz = asyncHandler(async (req, res, next) => {
+	const routine_quizes = await extractDataFromCollectionToObjWithKeyReady('routine_quiz', 'quiz_id');
+	const quizes_answer = await db.collection('users').doc(req.user).collection('routine_answers').get();
+	const quizes_answer_data = quizes_answer.docs.map((doc) => {
+		let docData = doc.data();
+		docData.id = doc.id; // assign the id of every docs
+		docData.routine_quiz = routine_quizes[docData.quiz_id];
+		return docData;
+	});
+	res.status(200).json({ sucess: true, data: quizes_answer_data });
 });
