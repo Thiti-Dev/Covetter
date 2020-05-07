@@ -8,6 +8,7 @@ const formattedLog = require('../utils/formatted-log');
 //
 const admin = require('../utils/firebase/firebase-service');
 const db = admin.firestore();
+const FieldValue = admin.firestore.FieldValue;
 
 // ────────────────────────────────────────────────────────────────────────────────
 
@@ -79,7 +80,8 @@ exports.answerRoutineQuiz = asyncHandler(async (req, res, next) => {
 
 	const _res = await db.collection('users').doc(req.user).collection('routine_answers').add({
 		quiz_id: quiz_id,
-		quiz_answer: answer
+		quiz_answer: answer,
+		createdAt: FieldValue.serverTimestamp()
 	});
 
 	res.status(200).json({ sucess: true, data: _res.id });
