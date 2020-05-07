@@ -12,6 +12,12 @@ const db = admin.firestore();
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
+// ─── FIRESTORE UTILS ────────────────────────────────────────────────────────────
+//
+const { getAllDataFromCollection } = require('../utils/firestore-utils');
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
 // ─── DESC ───────────────────────────────────────────────────────────────────────
 //
 // QUIZ TYPE
@@ -22,12 +28,6 @@ const db = admin.firestore();
 // ────────────────────────────────────────────────────────────────────────────────
 
 exports.getAllRoutineQuiz = asyncHandler(async (req, res, next) => {
-	let quizRef = db.collection('routine_quiz');
-	const _res = await quizRef.get();
-	const quizes = _res.docs.map((doc) => {
-		const docData = doc.data();
-		docData.id = doc.id; // assign the id of every docs
-		return docData;
-	});
+	const quizes = await getAllDataFromCollection('routine_quiz');
 	res.status(200).json({ sucess: true, data: quizes });
 });
