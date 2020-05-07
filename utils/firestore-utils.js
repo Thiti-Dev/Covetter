@@ -68,3 +68,15 @@ exports.getDataFromCollection = async (collection_name, option) => {
 	const _res = await collectionRef;
 	return new Gdfc(_res);
 };
+
+exports.extractDataFromCollectionToObjWithKeyReady = async (collection_name, foreign_key) => {
+	let collectionRef = db.collection(collection_name);
+	const _res = await collectionRef.get();
+	const finalized_data = {};
+	_res.docs.forEach((doc) => {
+		const doc_data = doc.data();
+		finalized_data[doc_data[foreign_key]] = { ...doc_data, id: doc.id };
+	});
+
+	return finalized_data;
+};
