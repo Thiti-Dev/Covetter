@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import LoginAndRegisterButton from './LoginAndRegisterButton';
 import styles from './Styles';
+import Loading from '../common/loadingScreen/Loading';
 
 const Landing = () => {
   return (

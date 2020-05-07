@@ -8,7 +8,7 @@ import {CheckBox, Overlay} from 'react-native-elements';
 import RegisterAgreement from './RegisterAgreement';
 import Validation from '../../../utils/validation';
 
-const RegisterInput = ({merge_function}) => {
+const RegisterInput = ({merge_function, set_loading}) => {
   const [isCheck, setCheck] = useState(false);
   const [isVisibleOverlay, setVisibleOverlay] = useState(false);
   const [credentials, setCredential] = useState({
@@ -26,6 +26,7 @@ const RegisterInput = ({merge_function}) => {
     let isErrors = Validation(credentials);
     if (isErrors === false) {
       merge_function(credentials, true);
+      set_loading(true);
     } else {
       setErrors(isErrors);
     }
@@ -37,7 +38,7 @@ const RegisterInput = ({merge_function}) => {
         <FontAwesomeIcon style={styles.iconInput} size={30} icon={faUserAlt} />
         <TextInput
           style={styles.textInput}
-          placeholder="First name"
+          placeholder="First Name*"
           value={credentials.firstName}
           onChangeText={value => {
             setCredential(prevState => {
@@ -48,12 +49,14 @@ const RegisterInput = ({merge_function}) => {
       </View>
       {errors.firstName ? (
         <Text style={styles.textInputError}>{errors.firstName}</Text>
-      ) : null}
+      ) : (
+        <Text style={{color: '#c5c5c5'}}>Example : John</Text>
+      )}
       <View style={styles.inputForm}>
         <FontAwesomeIcon style={styles.iconInput} size={30} icon={faUserAlt} />
         <TextInput
           style={styles.textInput}
-          placeholder="Last lame"
+          placeholder="Last Name*"
           value={credentials.lastName}
           onChangeText={value => {
             setCredential(prevState => {
@@ -64,13 +67,15 @@ const RegisterInput = ({merge_function}) => {
       </View>
       {errors.lastName ? (
         <Text style={styles.textInputError}>{errors.lastName}</Text>
-      ) : null}
+      ) : (
+        <Text style={{color: '#c5c5c5'}}>Example : Michel</Text>
+      )}
       <View style={styles.inputForm}>
         <FontAwesomeIcon style={styles.iconInput} size={30} icon={faPhone} />
         <TextInput
           keyboardType="number-pad"
           style={styles.textInput}
-          placeholder="Phone number"
+          placeholder="Phone number*"
           value={credentials.phone}
           onChangeText={value => {
             setCredential(prevState => {
@@ -81,12 +86,14 @@ const RegisterInput = ({merge_function}) => {
       </View>
       {errors.phone ? (
         <Text style={styles.textInputError}>{errors.phone}</Text>
-      ) : null}
+      ) : (
+        <Text style={{color: '#c5c5c5'}}>Example : (+66) XXXXXXXXXX</Text>
+      )}
       <View style={styles.checkboxViewStyle}>
         <CheckBox
           center
           containerStyle={styles.checkboxStyle}
-          title="Agreement & Terms"
+          title="Read agree and terms"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
           checked={isCheck}

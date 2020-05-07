@@ -13,7 +13,7 @@ const RegisterAgreement = (isCheck, setCheck, setVisibleOverlay) => {
         <CheckBox
           center
           containerStyle={styles.checkboxStyle}
-          title="Agreement & Terms"
+          title="I agree to terms"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
           checked={isCheck}
@@ -26,7 +26,7 @@ const RegisterAgreement = (isCheck, setCheck, setVisibleOverlay) => {
         <Button
           buttonStyle={styles.buttonInOverlay}
           icon={<Icon name="arrow-right" size={15} color="white" />}
-          title="Submit "
+          title="Back   "
           iconRight
           onPress={() => setVisibleOverlay(false)}
         />

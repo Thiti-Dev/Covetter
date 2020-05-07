@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
+  body: {
+    backgroundColor: '#ffffff',
+    height: '100%',
+  },
   header: {
     paddingHorizontal: '5%',
     paddingVertical: '2.5%',
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
 
   lebelText: {
     fontSize: 30,
-    color: '#3d3d3d',
+    color: '#39167e',
   },
 
   input: {
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
 
   buttonInput: {
     width: '100%',
-    backgroundColor: '#3d3d3d',
+    backgroundColor: '#39167e',
   },
 
   buttonTextInput: {

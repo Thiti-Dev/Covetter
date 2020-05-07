@@ -5,6 +5,7 @@ import RegisterII from './secondScreen/RegisterII';
 import Axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 import {Button, Overlay} from 'react-native-elements';
+import Loading from '../common/loadingScreen/Loading';
 
 const Register = () => {
   const navigation = useNavigation();
@@ -18,6 +19,8 @@ const Register = () => {
     state: false,
   });
 
+  const [isLoading, setLoading] = useState(false);
+
   const createTwoButtonAlert = () =>
     Alert.alert(
       '',
@@ -27,17 +30,20 @@ const Register = () => {
     );
 
   useEffect(() => {
-    if (credentials.state === true)
+    if (credentials.state === true) {
       Axios.post(
         ' https://covetter-api.herokuapp.com/api/auth/register',
         credentials,
       )
         .then(res => {
           navigation.navigate('LandingScreen');
+          setLoading(false);
         })
         .catch(err => {
           createTwoButtonAlert();
+          setLoading(false);
         });
+    }
   }, [credentials]);
 
   //
@@ -66,13 +72,22 @@ const Register = () => {
       break;
     case 1:
       rendered_content = (
-        <RegisterII set_step={setStep} merge_function={mergeCredentials} />
+        <RegisterII
+          set_step={setStep}
+          merge_function={mergeCredentials}
+          set_loading={setLoading}
+        />
       );
       break;
     default:
       break;
   }
-  return <View>{rendered_content}</View>;
+  return (
+    <View>
+      {rendered_content}
+      {Loading(isLoading)}
+    </View>
+  );
 };
 
 export default Register;

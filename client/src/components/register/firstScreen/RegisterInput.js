@@ -35,7 +35,7 @@ const RegisterInput = ({set_step, merge_function}) => {
         <TextInput
           keyboardType="email-address"
           style={styles.textInput}
-          placeholder="Email"
+          placeholder="Email Address*"
           value={credentials.email}
           onChangeText={value => {
             setCredential(prevState => {
@@ -46,13 +46,15 @@ const RegisterInput = ({set_step, merge_function}) => {
       </View>
       {errors.email ? (
         <Text style={styles.textInputError}>{errors.email}</Text>
-      ) : null}
+      ) : (
+        <Text style={{color: '#c5c5c5'}}>Example : email@mail.com</Text>
+      )}
       <View style={styles.inputForm}>
         <FontAwesomeIcon style={styles.iconInput} size={30} icon={faUserLock} />
         <TextInput
           secureTextEntry={true}
           style={styles.textInput}
-          placeholder="Password"
+          placeholder="Password*"
           value={credentials.password}
           onChangeText={value => {
             setCredential(prevState => {
@@ -63,13 +65,15 @@ const RegisterInput = ({set_step, merge_function}) => {
       </View>
       {errors.password ? (
         <Text style={styles.textInputError}>{errors.password}</Text>
-      ) : null}
+      ) : (
+        <Text style={{color: '#c5c5c5'}}>7 characters minimum</Text>
+      )}
       <View style={styles.inputForm}>
         <FontAwesomeIcon style={styles.iconInput} size={30} icon={faUserLock} />
         <TextInput
           secureTextEntry={true}
           style={styles.textInput}
-          placeholder="Re-password"
+          placeholder="Confirm Password*"
           value={credentials.confirmPassword}
           onChangeText={value => {
             setCredential(prevState => {
@@ -81,6 +85,7 @@ const RegisterInput = ({set_step, merge_function}) => {
       {errors.confirmPassword ? (
         <Text style={styles.textInputError}>{errors.confirmPassword}</Text>
       ) : null}
+
       <View style={styles.buttonFormInput}>
         <Button
           style={styles.buttonInput}
