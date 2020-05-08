@@ -10,5 +10,5 @@ const {
 const { protect } = require('../../middleware/auth');
 
 router.route('/').get(getAllAwarenessLocationAndInfo).post(protect, commitNewAwarenessData);
-router.route('/nearest').get(getNearestAwarenessLocationData);
+router.route('/nearest').post(getNearestAwarenessLocationData);
 module.exports = router;
