@@ -33,11 +33,17 @@ const geofirestore = new GeoFirestore.GeoFirestore(db);
 const geocollection = geofirestore.collection('awareness_data');
 // ────────────────────────────────────────────────────────────────────────────────
 
+// @desc    Get all of the Awareness location data
+// @route   GET /api/awareness/
+// @acess   Public
 exports.getAllAwarenessLocationAndInfo = asyncHandler(async (req, res, next) => {
 	const awareness_data = await getAllDataFromCollection('awareness_data');
 	res.status(200).json({ sucess: true, data: awareness_data });
 });
 
+// @desc    Commit the Awareness location data
+// @route   POST /api/awareness/
+// @acess   Public
 exports.commitNewAwarenessData = asyncHandler(async (req, res, next) => {
 	const staged_awareness_data = objKeyFilter(req.body, [ 'reason', 'involved', 'position' ]);
 	const geo_res = await geocoder.reverse({
@@ -56,6 +62,9 @@ exports.commitNewAwarenessData = asyncHandler(async (req, res, next) => {
 	res.status(200).json({ sucess: true, data: _res.id });
 });
 
+// @desc    Get the nearest data of the places that should be aware-of [ within 15 km ]
+// @route   POST /api/awareness/nearest
+// @acess   Public
 exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) => {
 	const { lat, lng } = req.body;
 
