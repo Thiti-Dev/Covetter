@@ -23,6 +23,7 @@ const { getAllDataFromCollection } = require('../utils/firestore-utils');
 //
 let objKeyFilter = require('../utils/objectKeyFilter');
 const geocoder = require('../utils/geocoder');
+const { isDateWithinDays } = require('../utils/time-utils');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
@@ -74,7 +75,6 @@ exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) =>
 			new ErrorResponse(`Request body is invalid, must've  contained {lat,lng} with the number type`, 400)
 		);
 	}
-
 	// Get the nearest point with the radius of [ 15 kilimeter ]
 	// 9 in radius = 7.2 kilometer in real unit [ Estimation ]
 	const query = await geocollection.near({ center: new admin.firestore.GeoPoint(lat, lng), radius: 15 }).get();
@@ -97,16 +97,22 @@ exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) =>
 	*/
 
 	const _fetched_location = await db.getAll(..._found_ids);
-	const fetched_location = _fetched_location.map((doc) => {
-		const _data = doc.data().d;
-		return {
-			address: _data.address,
-			position: _data.position,
-			reason: _data.reason,
-			involved: _data.involved,
-			createdAt: _data.createdAt.toDate()
-		};
-	});
+	const fetched_location = _fetched_location
+		.map((doc) => {
+			const _data = doc.data().d;
+			const _createdAt = _data.createdAt.toDate();
+			// If it is not in the range
+			if (isDateWithinDays(_createdAt, 14)) {
+				return {
+					address: _data.address,
+					position: _data.position,
+					reason: _data.reason,
+					involved: _data.involved,
+					createdAt: _createdAt
+				};
+			}
+		})
+		.filter((element) => element); // Filtering out the skipped one (null/undefiine)
 
 	res.status(200).json({ sucess: true, data: fetched_location });
 });
