@@ -47,6 +47,39 @@ exports.getAllAwarenessLocationAndInfo = asyncHandler(async (req, res, next) => 
 // @acess   Public
 exports.commitNewAwarenessData = asyncHandler(async (req, res, next) => {
 	const staged_awareness_data = objKeyFilter(req.body, [ 'reason', 'involved', 'position' ]);
+	//
+	// ─── VALIDATION ─────────────────────────────────────────────────────────────────
+	//
+
+	if (
+		typeof staged_awareness_data.position.lat !== 'number' ||
+		typeof staged_awareness_data.position.lng !== 'number' ||
+		typeof staged_awareness_data.reason !== 'string'
+	) {
+		return next(
+			new ErrorResponse(
+				`Request body is invalid, must've  contained {string of reason & numtype of lat,lng in the key=> position}`,
+				400
+			)
+		);
+	}
+	// If involved has specified
+	if (staged_awareness_data.involved) {
+		const allowed_expression = [ '>', '<', '=' ];
+		if (
+			typeof staged_awareness_data.involved.total_people !== 'number' ||
+			!allowed_expression.includes(staged_awareness_data.involved.expression)
+		) {
+			return next(
+				new ErrorResponse(
+					`Request body is invalid, must've contained total_people in the key involved with numtype & expression in the key involved with the contain expression ['<','>','=']`,
+					400
+				)
+			);
+		}
+	}
+	// ────────────────────────────────────────────────────────────────────────────────
+
 	const geo_res = await geocoder.reverse({
 		lat: staged_awareness_data.position.lat,
 		lon: staged_awareness_data.position.lng
