@@ -38,11 +38,13 @@ const covid = require('./routes/api/covid');
 const news = require('./routes/api/news');
 const routine = require('./routes/api/routine');
 const awareness = require('./routes/api/awareness');
+const succor = require('./routes/api/succor');
 app.use('/api/auth', auth);
 app.use('/api/covid', covid);
 app.use('/api/news', news);
 app.use('/api/routine', routine);
 app.use('/api/awareness', awareness);
+app.use('/api/succor', succor);
 // ────────────────────────────────────────────────────────────────────────────────
 //
 // ─── CUSTOM ERROR HANDLER ───────────────────────────────────────────────────────
