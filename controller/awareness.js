@@ -38,7 +38,7 @@ const geocollection = geofirestore.collection('awareness_data');
 // @route   GET /api/awareness/
 // @acess   Public
 exports.getAllAwarenessLocationAndInfo = asyncHandler(async (req, res, next) => {
-	const awareness_data = await getAllDataFromCollection('awareness_data');
+	const awareness_data = await getAllDataFromCollection('awareness_data', 'd');
 	res.status(200).json({ sucess: true, data: awareness_data });
 });
 
