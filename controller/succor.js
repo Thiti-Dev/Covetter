@@ -37,7 +37,7 @@ const { isDateWithinDays } = require('../utils/time-utils');
 // @route   GET /api/succor/
 // @acess   Public
 exports.getAllSupportedData = asyncHandler(async (req, res, next) => {
-	const awareness_data = await getAllDataFromCollection('succor');
+	const awareness_data = await getAllDataFromCollection('succor', 'd'); // prepending into the d key
 	res.status(200).json({ sucess: true, data: awareness_data });
 });
 
