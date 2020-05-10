@@ -26,6 +26,12 @@ let objKeyFilter = require('../utils/objectKeyFilter');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
+// ─── FIRESTORE UTILS ────────────────────────────────────────────────────────────
+//
+const { uploadPhotoToStorage } = require('../utils/firestore-utils');
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
 // ─── FUNCTION ───────────────────────────────────────────────────────────────────
 //
 const firestore_register_user_from_uid = (uid, credentials) => {
@@ -94,4 +100,38 @@ exports.updateUserProfileData = asyncHandler(async (req, res, next) => {
 	const finalized_update_data = objKeyFilter(req.body, [ 'firstName', 'lastName', 'phone' ]);
 	const _res_update = await userRef.update(finalized_update_data);
 	res.status(200).json({ success: true, data: _res_update });
+});
+
+// @desc    Update user profile image
+// @route   PUT /api/auth/upload_photo
+// @acess   Private
+exports.updateUserProfilePhoto = asyncHandler(async (req, res, next) => {
+	let userRef = db.collection('users').doc(req.user);
+	const _res = await userRef.get();
+	if (!_res.exists) {
+		return next(new ErrorResponse(`This user isn't exist on the database`, 404));
+	}
+
+	//
+	// ─── CHECK FOR FILE UPLOAD FIRST ─────────────────────────────────────────────────────────
+	//
+
+	if (!req.file) {
+		return next(new ErrorResponse(`Please upload a file`, 400));
+	}
+
+	const file = req.file;
+
+	// Make sure the image is a photo
+	if (!file.mimetype.startsWith('image')) {
+		return next(new ErrorResponse(`Please upload an image file`, 400));
+	}
+	// ────────────────────────────────────────────────────────────────────────────────
+	const _upload_url = await uploadPhotoToStorage(req.file, 'profile-images', req.user, false);
+
+	const _update_res = await userRef.update({
+		photo_url: _upload_url
+	});
+
+	res.status(200).json({ success: true, data: _upload_url });
 });
