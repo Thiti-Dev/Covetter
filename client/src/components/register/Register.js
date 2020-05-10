@@ -4,7 +4,6 @@ import RegisterI from './firstScreen/RegisterI';
 import RegisterII from './secondScreen/RegisterII';
 import Axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
-import {Button, Overlay} from 'react-native-elements';
 import Loading from '../common/loadingScreen/Loading';
 
 const Register = () => {
@@ -46,9 +45,8 @@ const Register = () => {
     }
   }, [credentials]);
 
-  //
+  // ────────────────────────────────────────────────────────────────────────────────
   // ─── CALL BACK ──────────────────────────────────────────────────────────────────
-  //
   const mergeCredentials = (data, bool) => {
     if (!bool)
       setCredential(prevState => {
@@ -82,12 +80,7 @@ const Register = () => {
     default:
       break;
   }
-  return (
-    <View>
-      {rendered_content}
-      {Loading(isLoading)}
-    </View>
-  );
+  return <View>{rendered_content}</View>;
 };
 
 export default Register;

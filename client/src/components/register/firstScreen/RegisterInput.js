@@ -17,6 +17,8 @@ const RegisterInput = ({set_step, merge_function}) => {
     errors: {},
   });
 
+  //
+  // ─── CALL VALIDATE FUNCTION ─────────────────────────────────────────────────────
   const validateFunction = () => {
     setErrors({});
     let isErrors = Validation(credentials);
@@ -27,6 +29,7 @@ const RegisterInput = ({set_step, merge_function}) => {
       setErrors(isErrors);
     }
   };
+  // ────────────────────────────────────────────────────────────────────────────────
 
   return (
     <View style={styles.input}>
