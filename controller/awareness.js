@@ -137,6 +137,7 @@ exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) =>
 			// If it is not in the range
 			if (isDateWithinDays(_createdAt, 14)) {
 				return {
+					id: doc.id,
 					address: _data.address,
 					position: _data.position,
 					reason: _data.reason,
