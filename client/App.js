@@ -1,10 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component, Profiler} from 'react';
 import {Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMapMarkedAlt, faTasks} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faNewspaper} from '@fortawesome/free-regular-svg-icons';
 
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── FIREBASE CONFIGURING ────────────────────────────────────────────────────────────
@@ -20,7 +24,10 @@ firebase.initializeApp(firebaseConfig);
 //
 import Login from './src/components/login/Login';
 import Register from './src/components/register';
-import Main from './src/components/main/Main';
+import Map from './src/components/map/Map';
+import News from './src/components/news/News';
+import Quiz from './src/components/quiz/Quiz';
+import Profile from './src/components/profile/Profile';
 // ────────────────────────────────────────────────────────────────────────────────
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -31,9 +38,11 @@ import store from './src/redux/store';
 
 import {setAuthenticated} from './src/redux/actions/authAction';
 import {loadingAction} from './src/redux/actions/loadingAction';
+
 // ────────────────────────────────────────────────────────────────────────────────
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── CONFIGS ─────────────────────────────────────────────────────────────────────
@@ -77,6 +86,51 @@ const authStack = (
   </NavigationContainer>
 );
 
+const appStack = (
+  <NavigationContainer>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
+          let iconName;
+          let iconColor;
+
+          if (route.name === 'Map') {
+            iconName = faMapMarkedAlt;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'News') {
+            iconName = faNewspaper;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Quiz') {
+            iconName = faTasks;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Profile') {
+            iconName = faUser;
+            iconColor = focused ? '#39167e' : 'gray';
+          }
+
+          // You can return any component that you like here!
+          return (
+            <FontAwesomeIcon icon={iconName} size={28} color={iconColor} />
+          );
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#39167e',
+        inactiveTintColor: 'gray',
+        showLabel: false,
+        style: {
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+        },
+      }}>
+      <Tab.Screen name="Map" component={Map} />
+      <Tab.Screen name="News" component={News} />
+      <Tab.Screen name="Quiz" component={Quiz} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  </NavigationContainer>
+);
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -102,7 +156,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        {this.state.isAuthenticated ? <Main /> : authStack}
+        {this.state.isAuthenticated ? appStack : authStack}
       </Provider>
     );
   }
