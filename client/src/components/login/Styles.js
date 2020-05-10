@@ -41,6 +41,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginVertical: 10,
   },
+  registerButtonContainer: {
+    flex: 1,
+    paddingHorizontal: 40,
+    paddingTop: 30,
+  },
+  registerButtonView: {
+    borderTopWidth: 1,
+    borderColor: '#dddddd',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    flexDirection: 'row',
+  },
 });
 
 export default styles;

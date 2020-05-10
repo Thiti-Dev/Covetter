@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {View, Text} from 'react-native';
-import LoginHeader from './LoginHeader';
+
 import LoginInput from './LoginInput';
+import RegisterButton from './RegisterButton';
+
 import styles from './Styles';
+import Loading from '../common/loadingScreen/Loading';
 
-const Login = () => {
-  return (
-    <View style={styles.container}>
-      <LoginHeader />
-      <LoginInput />
-    </View>
-  );
-};
-
+class Login extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Loading />
+        <LoginInput />
+        <RegisterButton />
+      </View>
+    );
+  }
+}
 export default Login;
