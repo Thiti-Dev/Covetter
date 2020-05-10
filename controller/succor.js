@@ -120,7 +120,6 @@ exports.getNearestCharityLocationData = asyncHandler(async (req, res, next) => {
 	const fetched_location = _fetched_location
 		.map((doc) => {
 			const _data = doc.data().d;
-			const _createdAt = _data.createdAt.toDate();
 			// If the event isn't ended yet
 			const now = new Date();
 			const _end_date = new Date(_data.endAt.toDate());
@@ -130,8 +129,8 @@ exports.getNearestCharityLocationData = asyncHandler(async (req, res, next) => {
 					address: _data.address,
 					position: _data.position,
 					description: _data.description,
-					createdAt: _createdAt,
-					endAt: _data.endAt
+					createdAt: _data.createdAt.toDate(),
+					endAt: _data.endAt.toDate()
 				};
 			}
 		})
