@@ -41,12 +41,18 @@ exports.addMultipleDocFromData = async (data, collection_name) => {
 	return await batch.commit();
 };
 
-exports.getAllDataFromCollection = async (collection_name) => {
+exports.getAllDataFromCollection = async (collection_name, prepend) => {
 	let collectionRef = db.collection(collection_name);
 	const _res = await collectionRef.get();
 	const _data = _res.docs.map((doc) => {
-		const docData = doc.data();
+		const docData = prepend ? doc.data()[prepend] : doc.data();
 		docData.id = doc.id; // assign the id of every docs
+		if (docData.createdAt) {
+			docData.createdAt = docData.createdAt.toDate();
+		}
+		if (docData.endAt) {
+			docData.endAt = docData.endAt.toDate();
+		}
 		return docData;
 	});
 	return _data;
