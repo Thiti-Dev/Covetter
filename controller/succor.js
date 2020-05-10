@@ -9,21 +9,13 @@ const formattedLog = require('../utils/formatted-log');
 const admin = require('../utils/firebase/firebase-service');
 const db = admin.firestore();
 const FieldValue = admin.firestore.FieldValue;
-const Geopoint = admin.firestore.GeoPoint;
+
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
 // ─── FIRESTORE UTILS ────────────────────────────────────────────────────────────
 //
-const { getAllDataFromCollection } = require('../utils/firestore-utils');
-// ────────────────────────────────────────────────────────────────────────────────
-
-//
-// ─── UTIL ───────────────────────────────────────────────────────────────────────
-//
-let objKeyFilter = require('../utils/objectKeyFilter');
-const geocoder = require('../utils/geocoder');
-const { isDateWithinDays } = require('../utils/time-utils');
+const { getAllDataFromCollection, uploadPhotoToStorage } = require('../utils/firestore-utils');
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
@@ -31,77 +23,72 @@ const { isDateWithinDays } = require('../utils/time-utils');
 //
 var GeoFirestore = require('geofirestore');
 const geofirestore = new GeoFirestore.GeoFirestore(db);
-const geocollection = geofirestore.collection('awareness_data');
+const geocollection = geofirestore.collection('succor');
 // ────────────────────────────────────────────────────────────────────────────────
 
-// @desc    Get all of the Awareness location data
-// @route   GET /api/awareness/
+//
+// ─── UTIL ───────────────────────────────────────────────────────────────────────
+//
+const geocoder = require('../utils/geocoder');
+const { isDateWithinDays } = require('../utils/time-utils');
+// ────────────────────────────────────────────────────────────────────────────────
+
+// @desc    Get all of the supoorted location data
+// @route   GET /api/succor/
 // @acess   Public
-exports.getAllAwarenessLocationAndInfo = asyncHandler(async (req, res, next) => {
-	const awareness_data = await getAllDataFromCollection('awareness_data', 'd');
+exports.getAllSupportedData = asyncHandler(async (req, res, next) => {
+	const awareness_data = await getAllDataFromCollection('succor', 'd'); // prepending into the d key
 	res.status(200).json({ sucess: true, data: awareness_data });
 });
 
-// @desc    Commit the Awareness location data
-// @route   POST /api/awareness/
-// @acess   Public
-exports.commitNewAwarenessData = asyncHandler(async (req, res, next) => {
-	const staged_awareness_data = objKeyFilter(req.body, [ 'reason', 'involved', 'position' ]);
+// @desc    Committing the charity/succor
+// @route   POST /api/succor/
+// @acess   Private
+exports.commitCharity = asyncHandler(async (req, res, next) => {
 	//
-	// ─── VALIDATION ─────────────────────────────────────────────────────────────────
+	// ─── CHECK FOR FILE UPLOAD FIRST ─────────────────────────────────────────────────────────
 	//
 
-	if (
-		typeof staged_awareness_data.position.lat !== 'number' ||
-		typeof staged_awareness_data.position.lng !== 'number' ||
-		typeof staged_awareness_data.reason !== 'string'
-	) {
-		return next(
-			new ErrorResponse(
-				`Request body is invalid, must've  contained {string of reason & numtype of lat,lng in the key=> position}`,
-				400
-			)
-		);
+	if (!req.file) {
+		return next(new ErrorResponse(`Please upload a file`, 400));
 	}
-	// If involved has specified
-	if (staged_awareness_data.involved) {
-		const allowed_expression = [ '>', '<', '=' ];
-		if (
-			typeof staged_awareness_data.involved.total_people !== 'number' ||
-			!allowed_expression.includes(staged_awareness_data.involved.expression)
-		) {
-			return next(
-				new ErrorResponse(
-					`Request body is invalid, must've contained total_people in the key involved with numtype & expression in the key involved with the contain expression ['<','>','=']`,
-					400
-				)
-			);
-		}
+
+	const file = req.file;
+
+	// Make sure the image is a photo
+	if (!file.mimetype.startsWith('image')) {
+		return next(new ErrorResponse(`Please upload an image file`, 400));
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
+	const _upload_url = await uploadPhotoToStorage(req.file, 'images');
+
+	const lat = parseFloat(req.body.lat);
+	const lng = parseFloat(req.body.lng);
 
 	const geo_res = await geocoder.reverse({
-		lat: staged_awareness_data.position.lat,
-		lon: staged_awareness_data.position.lng
+		lat: lat,
+		lon: lng
 	});
 	const _res = await geocollection.add({
-		...staged_awareness_data,
+		description: req.body.description,
 		address: geo_res[0].formattedAddress,
-		coordinates: new admin.firestore.GeoPoint(
-			staged_awareness_data.position.lat,
-			staged_awareness_data.position.lng
-		),
-		createdAt: FieldValue.serverTimestamp()
+		photo_url: _upload_url,
+		position: {
+			lat,
+			lng
+		},
+		coordinates: new admin.firestore.GeoPoint(lat, lng),
+		createdAt: FieldValue.serverTimestamp(),
+		endAt: admin.firestore.Timestamp.fromDate(new Date(req.body.endAt))
 	});
 	res.status(200).json({ sucess: true, data: _res.id });
 });
 
-// @desc    Get the nearest data of the places that should be aware-of [ within 15 km ]
-// @route   POST /api/awareness/nearest
+// @desc    Get the nearest data of the places that having the succor [ within 15 km ]
+// @route   POST /api/succor/nearest
 // @acess   Public
-exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) => {
+exports.getNearestCharityLocationData = asyncHandler(async (req, res, next) => {
 	const { lat, lng } = req.body;
-
 	// Validation
 	if (typeof lat !== 'number' || typeof lng !== 'number') {
 		return next(
@@ -118,7 +105,7 @@ exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) =>
 
 	const _found_ids = query.docs.reduce((prev, _data) => {
 		//Add its reference to the list
-		return prev.concat(db.collection('awareness_data').doc(_data.id));
+		return prev.concat(db.collection('succor').doc(_data.id));
 	}, []);
 
 	/* @COMMENTED OUT BECAUSE this method work only ids within 1-10 documents
@@ -134,14 +121,17 @@ exports.getNearestAwarenessLocationData = asyncHandler(async (req, res, next) =>
 		.map((doc) => {
 			const _data = doc.data().d;
 			const _createdAt = _data.createdAt.toDate();
-			// If it is not in the range
-			if (isDateWithinDays(_createdAt, 14)) {
+			// If the event isn't ended yet
+			const now = new Date();
+			const _end_date = new Date(_data.endAt.toDate());
+			if (now < _end_date) {
 				return {
+					id: doc.id,
 					address: _data.address,
 					position: _data.position,
-					reason: _data.reason,
-					involved: _data.involved,
-					createdAt: _createdAt
+					description: _data.description,
+					createdAt: _createdAt,
+					endAt: _data.endAt
 				};
 			}
 		})
