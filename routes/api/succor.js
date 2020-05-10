@@ -5,13 +5,7 @@ const { getAllSupportedData, commitCharity, getNearestCharityLocationData } = re
 
 const { protect } = require('../../middleware/auth');
 
-const multer = require('multer');
-const upload = multer({
-	storage: multer.memoryStorage(),
-	limits: {
-		fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
-	}
-});
+const upload = require('../../utils/multer');
 
 // Use any() for an dynamic specification
 router.route('/').get(getAllSupportedData).post(protect, upload.single('file'), commitCharity);

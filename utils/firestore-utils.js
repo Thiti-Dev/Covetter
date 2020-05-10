@@ -90,18 +90,24 @@ exports.extractDataFromCollectionToObjWithKeyReady = async (collection_name, for
 	return finalized_data;
 };
 
-exports.uploadPhotoToStorage = async (file, prefix = '') => {
-	const _url = await uploadImageToStorage(file, prefix);
+exports.uploadPhotoToStorage = async (file, prefix = '', filename = 'firebase-image', need_stamp = true) => {
+	const _url = await uploadImageToStorage(file, prefix, filename, need_stamp);
 	return _url;
 };
 
-const uploadImageToStorage = (file, prefix) => {
+const uploadImageToStorage = (file, prefix, filename, need_stamp) => {
 	return new Promise((resolve, reject) => {
 		if (!file) {
 			reject('No image file');
 		}
-		let newFileName = `${file.originalname}_${Date.now()}`;
+		let newFileName;
 
+		// Check if the file need stamping
+		if (need_stamp) {
+			newFileName = `${filename}_${Date.now()}`;
+		} else {
+			newFileName = filename;
+		}
 		let fileUpload = bucket.file(`${prefix ? `${prefix}/` : ''}` + newFileName);
 
 		const blobStream = fileUpload.createWriteStream({
