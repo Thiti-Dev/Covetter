@@ -21,6 +21,8 @@ const RegisterInput = ({merge_function, set_loading}) => {
     errors: {},
   });
 
+  //
+  // ─── CALL VALIDATE FUNCTION ─────────────────────────────────────────────────────
   const validateFunction = () => {
     setErrors({});
     let isErrors = Validation(credentials);
@@ -31,6 +33,7 @@ const RegisterInput = ({merge_function, set_loading}) => {
       setErrors(isErrors);
     }
   };
+  // ────────────────────────────────────────────────────────────────────────────────
 
   return (
     <View style={styles.input}>
