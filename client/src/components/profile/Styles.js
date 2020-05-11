@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
 
-    elevation: 4,
+    elevation: 1.5,
   },
   imageStyles: {
     resizeMode: 'cover',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
 
-    elevation: 4,
+    elevation: 1.5,
   },
   detailsText: {
     fontSize: (windowHeight * 16) / 1000,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
 
-    elevation: 4,
+    elevation: 1.5,
   },
   formEdit: {},
   signOutContainer: {
