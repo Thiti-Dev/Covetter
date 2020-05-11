@@ -1,88 +1,61 @@
 import React, {Component} from 'react';
-import {Text, View, Image, KeyboardAvoidingView} from 'react-native';
-import ProfileImage from './ProfileImage';
+import {
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import styles from './Styles';
-import ProfileName from './ProfileName';
-import ProfileEditButton from './ProfileEditButton';
-import LogOut from './LogOut';
-import ProfileEdit from './ProfileEdit';
-import {ScrollView} from 'react-native-gesture-handler';
+import SignOut from './SignOut';
+import LinearGradient from 'react-native-linear-gradient';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faUserAlt} from '@fortawesome/free-solid-svg-icons';
 
-export class Profile extends Component {
-  constructor(params) {
-    super();
-    this.state = {
-      onEditState: false,
-      user: {
-        name: 'Thananan Worrawongvutikrai',
-        email: 'admin@mail.com',
-        phone: '0991231213',
-      },
-    };
-  }
+export default class Profile extends Component {
   render() {
-    // ────────────────────────────────────────────────────────────────────────────────
-    //
-    // ─── FUNCTION TO SET TOGGLE BUTTON ──────────────────────────────────────────────
-    //
-    // ────────────────────────────────────────────────────────────────────────────────
-
-    const setStateFunction = (recieved) => {
-      if (recieved) {
-        //*console.log('User data updated');
-        //*console.log(this.state.user);
-        this.setState({
-          onEditState: !this.state.onEditState,
-        });
-      } else {
-        this.setState({
-          onEditState: !this.state.onEditState,
-        });
-      }
+    const imageUrl = {
+      uri:
+        'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.0-9/87174829_2721734137902520_2355997481222799360_o.jpg?_nc_cat=102&_nc_sid=09cbfe&_nc_eui2=AeE-5LJVzmMv8ZwW3cywz5c6ldjHzEffU8-V2MfMR99Tz-R6yl99ayiaP5tw2KAKkN7FlrIUyK6sfX5CAPO5grhF&_nc_oc=AQmk8oHcMsAIh26nULVhFe-DesxQQYe5-D1pAel8aBHyO6KH_78_4RBxTfq8lo0zpVI&_nc_ht=scontent.fbkk7-2.fna&oh=838964dfaa2d7187e767da654cdca5b7&oe=5EDC7C73',
     };
-
-    // ────────────────────────────────────────────────────────────────────────────────
-    //
-    // ─── FUNCTION SET STATE ON TEXT INPUT CHANGING ──────────────────────────────────
-    //
-    // ────────────────────────────────────────────────────────────────────────────────
-
-    const onHandlerChance = (value, keyValue) => {
-      //*console.log(this.state);
-      //*console.log(value);
-      this.setState((prevState) => {
-        return {...prevState, user: {...this.state.user, [keyValue]: value}};
-      });
-    };
-
-    // ────────────────────────────────────────────────────────────────────────────────
-    // ────────────────────────────────────────────────────────────────────────────────
-    // ────────────────────────────────────────────────────────────────────────────────
-
     return (
-      <KeyboardAvoidingView behavior="height" enabled style={styles.container}>
-        <ScrollView>
-          <View style={styles.profileContainer}>
-            <LogOut />
-            <ProfileImage />
-            {this.state.onEditState ? (
-              <ProfileEdit
-                state_user={this.state.user}
-                on_handler={onHandlerChance}
+      <KeyboardAvoidingView behavior="padding" enabled style={styles.container}>
+        <SignOut />
+        <View style={styles.top}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={['#6846ff', '#56ffd5']}
+            style={[styles.cardForm, {justifyContent: 'center'}]}>
+            <View style={styles.cardBar}>
+              <Image
+                //source={require('../../assets/images/user.png')}
+                source={imageUrl}
+                style={styles.imageStyles}
               />
-            ) : (
-              <ProfileName state_user={this.state.user} />
-            )}
-            <ProfileEditButton
-              state_on_submit={this.state.onEditState}
-              set_state={setStateFunction}
-              title={this.state.onEditState ? 'save' : 'edit profile'}
-            />
+              <TouchableOpacity style={styles.createButtonEdit}>
+                <Text style={{color: '#3d3d3d'}}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
+        </View>
+        <View style={styles.middle}>
+          <View style={styles.cardForm}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 38,
+                  fontWeight: '500',
+                  color: '#6846ff',
+                  fontFamily: 'Prompt-Regular',
+                  textAlign: 'center',
+                }}>
+                Blue Bearrii
+              </Text>
+            </View>
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     );
   }
 }
-
-export default Profile;
