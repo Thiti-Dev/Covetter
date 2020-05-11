@@ -15,7 +15,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {faUser, faNewspaper} from '@fortawesome/free-regular-svg-icons';
 
-
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── FIREBASE CONFIGURING ────────────────────────────────────────────────────────────
 //
@@ -39,11 +38,11 @@ import Profile from './src/components/profile/Profile';
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── REDUX ──────────────────────────────────────────────────────────────────────
 //
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from './src/redux/store';
 
-import { setAuthenticated } from './src/redux/actions/authAction';
-import { loadingAction } from './src/redux/actions/loadingAction';
+import {setAuthenticated} from './src/redux/actions/authAction';
+import {loadingAction} from './src/redux/actions/loadingAction';
 
 // ────────────────────────────────────────────────────────────────────────────────
 
@@ -66,42 +65,49 @@ const Tab = createBottomTabNavigator();
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── CONFIGS ─────────────────────────────────────────────────────────────────────
 const config = {
-	animation: 'spring',
-	config: {
-		stiffness: 1000,
-		damping: 500,
-		mass: 3,
-		overshootClamping: true,
-		restDisplacementThreshold: 0.01,
-		restSpeedThreshold: 0.01
-	}
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
 };
 
 import {Dimensions} from 'react-native';
-import Awareness from './src/components/awareness/Awareness';
+import Awareness from './src/components/Awareness';
 import Succor from './src/components/succor/Succor';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 // ────────────────────────────────────────────────────────────────────────────────
 
 const authStack = (
-	<NavigationContainer>
-		<Stack.Navigator
-			initialRouteName="LoginScreen"
-			screenOptions={{
-				gestureEnabled: true,
-				gestureDirection: 'horizontal',
-				cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-				transitionSpec: {
-					open: config,
-					close: config
-				}
-			}}
-		>
-			<Stack.Screen name="LoginScreen" component={Login} options={{ headerShown: false }} />
-			<Stack.Screen name="RegisterFirstScreen" component={Register} options={{ headerShown: false }} />
-		</Stack.Navigator>
-	</NavigationContainer>
+  <NavigationContainer>
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+      screenOptions={{
+        gestureEnabled: true,
+        gestureDirection: 'horizontal',
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        transitionSpec: {
+          open: config,
+          close: config,
+        },
+      }}>
+      <Stack.Screen
+        name="LoginScreen"
+        component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="RegisterFirstScreen"
+        component={Register}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
 );
 
 const appStack = (
@@ -157,33 +163,37 @@ const appStack = (
 );
 
 export default class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isAuthenticated: false
-		};
-	}
-	componentDidMount() {
-		store.dispatch(loadingAction(true));
-		let _this = this;
-		firebase.auth().onAuthStateChanged(async function(user) {
-			if (user) {
-				// Set the token to the axios auth-header
-				const userToken = await user.getIdToken();
-				setAuthToken(userToken);
-				// • • • • •
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthenticated: false,
+    };
+  }
+  componentDidMount() {
+    store.dispatch(loadingAction(true));
+    let _this = this;
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        // Set the token to the axios auth-header
+        const userToken = await user.getIdToken();
+        setAuthToken(userToken);
+        // • • • • •
 
-				store.dispatch(setAuthenticated(true));
-				_this.setState({ isAuthenticated: true });
-				store.dispatch(loadingAction(false));
-			} else {
-				store.dispatch(setAuthenticated(false));
-				_this.setState({ isAuthenticated: false });
-				store.dispatch(loadingAction(false));
-			}
-		});
-	}
-	render() {
-		return <Provider store={store}>{this.state.isAuthenticated ? appStack : authStack}</Provider>;
-	}
+        store.dispatch(setAuthenticated(true));
+        _this.setState({isAuthenticated: true});
+        store.dispatch(loadingAction(false));
+      } else {
+        store.dispatch(setAuthenticated(false));
+        _this.setState({isAuthenticated: false});
+        store.dispatch(loadingAction(false));
+      }
+    });
+  }
+  render() {
+    return (
+      <Provider store={store}>
+        {this.state.isAuthenticated ? appStack : authStack}
+      </Provider>
+    );
+  }
 }
