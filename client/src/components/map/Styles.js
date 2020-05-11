@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   cardStatistics: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 5,
+    elevation: 1.5,
+    borderRadius: 10,
   },
 
   statistics: {
@@ -35,8 +37,18 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'green',
     borderRadius: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 3.84,
+
+    elevation: 1.5,
   },
   dataDetailsSecond: {
     width: '100%',

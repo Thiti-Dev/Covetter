@@ -5,9 +5,8 @@ import MapStatistic from './MapStatistic';
 export default class Map extends Component {
   render() {
     return (
-      <View>
+      <View style={{flex: 1}}>
         <MapStatistic />
-        <Text> Map </Text>
       </View>
     );
   }
