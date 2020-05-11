@@ -1,88 +1,80 @@
 import React, {Component} from 'react';
-import {Text, View, Image, KeyboardAvoidingView} from 'react-native';
-import ProfileImage from './ProfileImage';
+import {
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import styles from './Styles';
-import ProfileName from './ProfileName';
-import ProfileEditButton from './ProfileEditButton';
-import LogOut from './LogOut';
-import ProfileEdit from './ProfileEdit';
+import SignOut from './SignOut';
+import LinearGradient from 'react-native-linear-gradient';
+import ProfileDetails from './ProfileDetails';
+import EditProfile from './EditProfile';
 import {ScrollView} from 'react-native-gesture-handler';
+import Axios from 'axios';
 
-export class Profile extends Component {
-  constructor(params) {
+export default class Profile extends Component {
+  constructor() {
     super();
     this.state = {
-      onEditState: false,
-      user: {
-        name: 'Thananan Worrawongvutikrai',
-        email: 'admin@mail.com',
-        phone: '0991231213',
-      },
+      toggleState: false,
+      name: 'admin',
+      email: 'admin@mail.com',
+      phone: '0991231213',
     };
   }
+  componentDidMount() {}
   render() {
-    // ────────────────────────────────────────────────────────────────────────────────
-    //
-    // ─── FUNCTION TO SET TOGGLE BUTTON ──────────────────────────────────────────────
-    //
-    // ────────────────────────────────────────────────────────────────────────────────
-
-    const setStateFunction = (recieved) => {
-      if (recieved) {
-        //*console.log('User data updated');
-        //*console.log(this.state.user);
-        this.setState({
-          onEditState: !this.state.onEditState,
-        });
-      } else {
-        this.setState({
-          onEditState: !this.state.onEditState,
-        });
-      }
+    const imageUrl = {
+      uri:
+        'https://scontent.fbkk7-2.fna.fbcdn.net/v/t1.0-9/87174829_2721734137902520_2355997481222799360_o.jpg?_nc_cat=102&_nc_sid=09cbfe&_nc_eui2=AeE-5LJVzmMv8ZwW3cywz5c6ldjHzEffU8-V2MfMR99Tz-R6yl99ayiaP5tw2KAKkN7FlrIUyK6sfX5CAPO5grhF&_nc_oc=AQmk8oHcMsAIh26nULVhFe-DesxQQYe5-D1pAel8aBHyO6KH_78_4RBxTfq8lo0zpVI&_nc_ht=scontent.fbkk7-2.fna&oh=838964dfaa2d7187e767da654cdca5b7&oe=5EDC7C73',
     };
-
-    // ────────────────────────────────────────────────────────────────────────────────
-    //
-    // ─── FUNCTION SET STATE ON TEXT INPUT CHANGING ──────────────────────────────────
-    //
-    // ────────────────────────────────────────────────────────────────────────────────
-
-    const onHandlerChance = (value, keyValue) => {
-      //*console.log(this.state);
-      //*console.log(value);
-      this.setState((prevState) => {
-        return {...prevState, user: {...this.state.user, [keyValue]: value}};
-      });
-    };
-
-    // ────────────────────────────────────────────────────────────────────────────────
-    // ────────────────────────────────────────────────────────────────────────────────
-    // ────────────────────────────────────────────────────────────────────────────────
 
     return (
-      <KeyboardAvoidingView behavior="height" enabled style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
         <ScrollView>
-          <View style={styles.profileContainer}>
-            <LogOut />
-            <ProfileImage />
-            {this.state.onEditState ? (
-              <ProfileEdit
-                state_user={this.state.user}
-                on_handler={onHandlerChance}
-              />
+          <SignOut />
+          <View style={styles.top}>
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#6846ff', '#56ffd5']}
+              style={[styles.cardForm, {justifyContent: 'center'}]}>
+              <View style={styles.cardBar}>
+                <Image
+                  //source={require('../../assets/images/user.png')}
+                  source={imageUrl}
+                  style={styles.imageStyles}
+                />
+              </View>
+            </LinearGradient>
+          </View>
+          <View style={styles.middle}>
+            {this.state.toggleState ? (
+              <EditProfile user_state={this.state} />
             ) : (
-              <ProfileName state_user={this.state.user} />
+              <ProfileDetails user_state={this.state} />
             )}
-            <ProfileEditButton
-              state_on_submit={this.state.onEditState}
-              set_state={setStateFunction}
-              title={this.state.onEditState ? 'save' : 'edit profile'}
-            />
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <TouchableOpacity style={styles.createButtonEdit}>
+                <Text
+                  style={styles.detailsText}
+                  onPress={() =>
+                    this.setState({toggleState: !this.state.toggleState})
+                  }>
+                  {this.state.toggleState ? 'Save' : 'Edit profile'}
+                </Text>
+              </TouchableOpacity>
+              <Image
+                source={require('../../assets/images/earth.png')}
+                style={styles.imageProps}
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
     );
   }
 }
-
-export default Profile;

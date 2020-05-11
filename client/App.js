@@ -1,11 +1,20 @@
-import React, { Component, Profiler } from 'react';
-import { Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMapMarkedAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
-import { faUser, faNewspaper } from '@fortawesome/free-regular-svg-icons';
+import React, {Component, Profiler} from 'react';
+import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faMapMarkedAlt,
+  faTasks,
+  faRadiation,
+  faBullhorn,
+} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faNewspaper} from '@fortawesome/free-regular-svg-icons';
+
 
 // ────────────────────────────────────────────────────────────────────────────────
 // ─── FIREBASE CONFIGURING ────────────────────────────────────────────────────────────
@@ -67,6 +76,12 @@ const config = {
 		restSpeedThreshold: 0.01
 	}
 };
+
+import {Dimensions} from 'react-native';
+import Awareness from './src/components/awareness/Awareness';
+import Succor from './src/components/succor/Succor';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 // ────────────────────────────────────────────────────────────────────────────────
 
 const authStack = (
@@ -90,47 +105,55 @@ const authStack = (
 );
 
 const appStack = (
-	<NavigationContainer>
-		<Tab.Navigator
-			screenOptions={({ route }) => ({
-				tabBarIcon: ({ focused }) => {
-					let iconName;
-					let iconColor;
+  <NavigationContainer>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
+          let iconName;
+          let iconColor;
 
-					if (route.name === 'Map') {
-						iconName = faMapMarkedAlt;
-						iconColor = focused ? '#39167e' : 'gray';
-					} else if (route.name === 'News') {
-						iconName = faNewspaper;
-						iconColor = focused ? '#39167e' : 'gray';
-					} else if (route.name === 'Quiz') {
-						iconName = faTasks;
-						iconColor = focused ? '#39167e' : 'gray';
-					} else if (route.name === 'Profile') {
-						iconName = faUser;
-						iconColor = focused ? '#39167e' : 'gray';
-					}
+          if (route.name === 'Map') {
+            iconName = faMapMarkedAlt;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'News') {
+            iconName = faNewspaper;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Quiz') {
+            iconName = faTasks;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Profile') {
+            iconName = faUser;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Awareness') {
+            iconName = faRadiation;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Succor') {
+            iconName = faBullhorn;
+            iconColor = focused ? '#39167e' : 'gray';
+          }
 
-					// You can return any component that you like here!
-					return <FontAwesomeIcon icon={iconName} size={28} color={iconColor} />;
-				}
-			})}
-			tabBarOptions={{
-				activeTintColor: '#39167e',
-				inactiveTintColor: 'gray',
-				showLabel: false,
-				style: {
-					borderTopLeftRadius: 30,
-					borderTopRightRadius: 30
-				}
-			}}
-		>
-			<Tab.Screen name="Map" component={Map} />
-			<Tab.Screen name="News" component={News} />
-			<Tab.Screen name="Quiz" component={Quiz} />
-			<Tab.Screen name="Profile" component={Profile} />
-		</Tab.Navigator>
-	</NavigationContainer>
+          // You can return any component that you like here!
+          return <FontAwesomeIcon icon={iconName} color={iconColor} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: '#39167e',
+        inactiveTintColor: 'gray',
+        showLabel: false,
+        style: {
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          height: (windowHeight * 8) / 100,
+        },
+      }}>
+      <Tab.Screen name="Awareness" component={Awareness} />
+      <Tab.Screen name="Succor" component={Succor} />
+      <Tab.Screen name="Map" component={Map} />
+      <Tab.Screen name="News" component={News} />
+      <Tab.Screen name="Quiz" component={Quiz} />
+      <Tab.Screen name="Profile" component={Profile} />
+    </Tab.Navigator>
+  </NavigationContainer>
 );
 
 export default class App extends Component {

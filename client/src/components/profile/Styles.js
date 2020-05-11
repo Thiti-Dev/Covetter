@@ -1,89 +1,122 @@
 import {StyleSheet} from 'react-native';
+import {Dimensions} from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  profileContainer: {
-    flex: 1,
+  top: {
+    height: (windowHeight * 25) / 100,
+    backgroundColor: '#ffffff',
   },
-  imageContainer: {
+
+  middle: {
+    height: (windowHeight * 75) / 100,
+    paddingTop: 45,
+  },
+
+  cardForm: {
     flex: 1,
     alignItems: 'center',
+  },
+
+  cardBar: {
+    width: (windowWidth * 50) / 100,
+    height: (windowWidth * 50) / 100,
+    position: 'absolute',
+    bottom: -40,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#ededed',
-    backgroundColor: '#39167e',
-    paddingVertical: '18%',
+    alignItems: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 4,
   },
-  imageRoundContainer: {
-    flex: 10,
-    height: 250,
-    width: 250,
-    borderWidth: 8,
-    borderColor: '#ffffff',
-    borderRadius: 1000,
-  },
-  userImage: {
+  imageStyles: {
     resizeMode: 'cover',
-    borderRadius: 1000,
-    borderColor: '#39167e',
-    borderWidth: 10,
-    height: '100%',
-    width: '100%',
+    width: '80%',
+    height: '80%',
+    borderRadius: 90,
+    margin: 10,
   },
-  nameContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 15,
+  createButtonEdit: {
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
   },
-  formStyle: {
-    padding: 5,
-    width: '100%',
-    marginVertical: 5,
-    flexDirection: 'row',
-    borderBottomWidth: 0.5,
-    borderColor: '#ededed',
+  imageProps: {
+    resizeMode: 'cover',
+    width: (windowWidth * 30) / 100,
+    height: (windowWidth * 30) / 100,
+    borderRadius: 90,
+    margin: 10,
   },
-  formStyleIcon: {
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    alignItems: 'center',
-    flex: 1,
-    borderRightWidth: 1,
+  createButtonEdit: {
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
   },
-  formStyleText: {
-    justifyContent: 'center',
-    flex: 10,
+  detailsContainer: {
+    width: (windowWidth * 90) / 100,
+    height: (windowHeight * 10) / 100,
     padding: 10,
-    fontSize: 18,
-  },
-  formText: {
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  formTextInput: {padding: 0},
-  profileEditContainer: {
-    flex: 1,
-    paddingTop: 5,
-    paddingBottom: '10%',
-    marginTop: 25,
-  },
-  logOut: {
-    flex: 1,
-    padding: 10,
-    justifyContent: 'flex-end',
+    marginVertical: (windowHeight * 10) / 1000,
+    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 4,
   },
-  logOutText: {
-    fontWeight: 'bold',
-    color: '#39167e',
+  detailsText: {
+    fontSize: (windowHeight * 16) / 1000,
+    color: '#3d3d3d',
+    fontFamily: 'Prompt-Regular',
+    textAlign: 'center',
+    marginHorizontal: 5,
   },
-  logOutIcon: {
-    marginHorizontal: 10,
+  editContainer: {
+    width: (windowWidth * 90) / 100,
+    height: (windowHeight * 10) / 100,
+    padding: 10,
+    marginVertical: (windowHeight * 10) / 1000,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 4,
+  },
+  formEdit: {},
+  signOutContainer: {
+    backgroundColor: '#ffffff',
+    alignItems: 'flex-end',
   },
 });
 
