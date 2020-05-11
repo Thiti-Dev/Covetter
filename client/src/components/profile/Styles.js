@@ -5,85 +5,57 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  profileContainer: {
-    flex: 1,
+  top: {
+    flex: 1.5,
   },
-  imageContainer: {
+
+  middle: {
+    flex: 3,
+    paddingTop: 45,
+    padding: 15,
+  },
+
+  cardForm: {
     flex: 1,
+    backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: '#ededed',
-    backgroundColor: '#39167e',
-    paddingVertical: '18%',
   },
-  imageRoundContainer: {
-    flex: 10,
-    height: 250,
-    width: 250,
-    borderWidth: 8,
-    borderColor: '#ffffff',
-    borderRadius: 1000,
+
+  cardBar: {
+    position: 'absolute',
+    bottom: -40,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    height: '110%',
+    width: '90%',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 4,
   },
-  userImage: {
+  imageStyles: {
     resizeMode: 'cover',
-    borderRadius: 1000,
-    borderColor: '#39167e',
-    borderWidth: 10,
-    height: '100%',
-    width: '100%',
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    margin: 10,
   },
-  nameContainer: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 15,
+  createButtonEdit: {
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
   },
-  formStyle: {
-    padding: 5,
-    width: '100%',
-    marginVertical: 5,
-    flexDirection: 'row',
-    borderBottomWidth: 0.5,
-    borderColor: '#ededed',
-  },
-  formStyleIcon: {
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    alignItems: 'center',
-    flex: 1,
-    borderRightWidth: 1,
-  },
-  formStyleText: {
-    justifyContent: 'center',
-    flex: 10,
+  signOutContainer: {
     padding: 10,
-    fontSize: 18,
-  },
-  formText: {
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  formTextInput: {padding: 0},
-  profileEditContainer: {
-    flex: 1,
-    paddingTop: 5,
-    paddingBottom: '10%',
-    marginTop: 25,
-  },
-  logOut: {
-    flex: 1,
-    padding: 10,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  logOutText: {
-    fontWeight: 'bold',
-    color: '#39167e',
-  },
-  logOutIcon: {
-    marginHorizontal: 10,
+    backgroundColor: '#ffffff',
+    alignItems: 'flex-end',
   },
 });
 
