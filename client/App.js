@@ -33,6 +33,8 @@ import Map from './src/components/map/Map';
 import News from './src/components/news/News';
 import Quiz from './src/components/quiz/Quiz';
 import Profile from './src/components/profile/Profile';
+import Succor from './src/components/succor/Succor';
+import Awareness from './src/components/Awareness';
 // ────────────────────────────────────────────────────────────────────────────────
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -77,8 +79,7 @@ const config = {
 };
 
 import {Dimensions} from 'react-native';
-import Awareness from './src/components/Awareness';
-import Succor from './src/components/succor/Succor';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 // ────────────────────────────────────────────────────────────────────────────────
