@@ -7,7 +7,12 @@ import {
 } from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMapMarkedAlt, faTasks} from '@fortawesome/free-solid-svg-icons';
+import {
+  faMapMarkedAlt,
+  faTasks,
+  faRadiation,
+  faBullhorn,
+} from '@fortawesome/free-solid-svg-icons';
 import {faUser, faNewspaper} from '@fortawesome/free-regular-svg-icons';
 
 // ────────────────────────────────────────────────────────────────────────────────
@@ -57,6 +62,12 @@ const config = {
     restSpeedThreshold: 0.01,
   },
 };
+
+import {Dimensions} from 'react-native';
+import Awareness from './src/components/awareness/Awareness';
+import Succor from './src/components/succor/Succor';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 // ────────────────────────────────────────────────────────────────────────────────
 
 const authStack = (
@@ -106,12 +117,16 @@ const appStack = (
           } else if (route.name === 'Profile') {
             iconName = faUser;
             iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Awareness') {
+            iconName = faRadiation;
+            iconColor = focused ? '#39167e' : 'gray';
+          } else if (route.name === 'Succor') {
+            iconName = faBullhorn;
+            iconColor = focused ? '#39167e' : 'gray';
           }
 
           // You can return any component that you like here!
-          return (
-            <FontAwesomeIcon icon={iconName} size={28} color={iconColor} />
-          );
+          return <FontAwesomeIcon icon={iconName} color={iconColor} />;
         },
       })}
       tabBarOptions={{
@@ -121,8 +136,11 @@ const appStack = (
         style: {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
+          height: (windowHeight * 8) / 100,
         },
       }}>
+      <Tab.Screen name="Awareness" component={Awareness} />
+      <Tab.Screen name="Succor" component={Succor} />
       <Tab.Screen name="Map" component={Map} />
       <Tab.Screen name="News" component={News} />
       <Tab.Screen name="Quiz" component={Quiz} />
