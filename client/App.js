@@ -45,6 +45,12 @@ let axiosDefaults = require('axios/lib/defaults');
 axiosDefaults.baseURL = 'https://covetter-api.herokuapp.com';
 // ────────────────────────────────────────────────────────────────────────────────
 
+//
+// ─── UTILITY IMPORT ─────────────────────────────────────────────────────────────
+//
+import setAuthToken from './src/utils/setAuthToken';
+// ────────────────────────────────────────────────────────────────────────────────
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -137,8 +143,13 @@ export default class App extends Component {
 	componentDidMount() {
 		store.dispatch(loadingAction(true));
 		let _this = this;
-		firebase.auth().onAuthStateChanged(function(user) {
+		firebase.auth().onAuthStateChanged(async function(user) {
 			if (user) {
+				// Set the token to the axios auth-header
+				const userToken = await user.getIdToken();
+				setAuthToken(userToken);
+				// • • • • •
+
 				store.dispatch(setAuthenticated(true));
 				_this.setState({ isAuthenticated: true });
 				store.dispatch(loadingAction(false));
