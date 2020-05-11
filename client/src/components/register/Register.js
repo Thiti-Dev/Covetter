@@ -28,7 +28,7 @@ const Register = () => {
 	useEffect(
 		() => {
 			if (credentials.state === true) {
-				Axios.post(' https://covetter-api.herokuapp.com/api/auth/register', credentials)
+				Axios.post('/api/auth/register', credentials)
 					.then((res) => {
 						navigation.navigate('LoginScreen');
 						setLoading(false);
