@@ -10,7 +10,8 @@ import styles from './Styles';
 import SignOut from './SignOut';
 import LinearGradient from 'react-native-linear-gradient';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faUserAlt} from '@fortawesome/free-solid-svg-icons';
+import {faHeart, faMobileAlt} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelopeOpen} from '@fortawesome/free-regular-svg-icons';
 
 export default class Profile extends Component {
   render() {
@@ -41,18 +42,105 @@ export default class Profile extends Component {
         </View>
         <View style={styles.middle}>
           <View style={styles.cardForm}>
-            <View>
+            <View
+              style={{
+                width: '100%',
+                marginVertical: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                padding: 10,
+                borderRadius: 10,
+                backgroundColor: '#ffffff',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 0,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+
+                elevation: 4,
+              }}>
               <Text
                 style={{
-                  fontSize: 38,
-                  fontWeight: '500',
+                  fontSize: 24,
                   color: '#6846ff',
                   fontFamily: 'Prompt-Regular',
                   textAlign: 'center',
+                  marginHorizontal: 5,
                 }}>
                 Blue Bearrii
               </Text>
+              <FontAwesomeIcon icon={faHeart} size={28} color="#FF765E" />
             </View>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                padding: 10,
+                borderRadius: 10,
+                backgroundColor: '#ffffff',
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 0,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+
+                elevation: 4,
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRightWidth: 0.6,
+                  flex: 1,
+                  borderColor: '#cdcdcd',
+                }}>
+                <FontAwesomeIcon
+                  icon={faEnvelopeOpen}
+                  size={28}
+                  color="#522BFF"
+                />
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#3d3d3d',
+                    fontFamily: 'Prompt-Regular',
+                    textAlign: 'center',
+                    marginHorizontal: 5,
+                  }}>
+                  admin@mail.com
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flex: 1,
+                }}>
+                <FontAwesomeIcon icon={faMobileAlt} size={28} color="#522BFF" />
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: '#3d3d3d',
+                    fontFamily: 'Prompt-Regular',
+                    textAlign: 'center',
+                    marginHorizontal: 5,
+                  }}>
+                  0997122421
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <Image
+              source={require('../../assets/images/earth.png')}
+              style={styles.imageStyles}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>
