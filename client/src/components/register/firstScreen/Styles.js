@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 
   lebelText: {
     fontSize: 30,
-    color: '#39167e',
+    color: '#6846ff',
   },
 
   input: {
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
   buttonInput: {
     width: '100%',
-    backgroundColor: '#39167e',
+    backgroundColor: '#6846ff',
   },
 
   buttonTextInput: {

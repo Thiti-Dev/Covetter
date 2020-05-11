@@ -1,9 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
-import styles from './Styles';
+
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDoubleLeft} from '@fortawesome/free-solid-svg-icons';
+
 import {useNavigation} from '@react-navigation/native';
+
+import styles from './Styles';
 
 const LoginHeader = () => {
   const navigation = useNavigation();
