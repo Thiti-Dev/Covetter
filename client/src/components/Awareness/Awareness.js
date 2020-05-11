@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, PermissionsAndroid} from 'react-native';
+import {Text, View, PermissionsAndroid, ScrollView} from 'react-native';
 import {Flex, WhiteSpace} from '@ant-design/react-native';
 import MapView, {
   Marker,
@@ -115,8 +115,25 @@ export default class Awareness extends Component {
     if (awareness_locations) {
       render_awareness_location = awareness_locations.map((data, key) => {
         return (
-          <React.Fragment key={key}>
-            <Text>{data.reason}</Text>
+          <View
+            key={key}
+            style={{
+              backgroundColor: '#ffffff',
+              padding: 10,
+              marginBottom: 10,
+              borderRadius: 15,
+              justifyContent: 'center',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
+
+              elevation: 1.5,
+            }}>
+            <Text style={{fontWeight: 'bold'}}>{data.reason}</Text>
             <Text>
               distance:{' '}
               {distance(
@@ -127,8 +144,7 @@ export default class Awareness extends Component {
                 'K',
               )}
             </Text>
-            <Text>{'\n'}</Text>
-          </React.Fragment>
+          </View>
         );
       });
       map_rendered_circle = awareness_locations.map((data, key) => {
@@ -144,29 +160,36 @@ export default class Awareness extends Component {
       });
     }
     return (
-      <React.Fragment>
-        <View style={{height: '50%'}}>
-          <MapView
-            style={{flex: 1}}
-            provider={'google'}
-            ref={map => {
-              // Referencing the map
-              this.map = map;
-            }}
-            track
-            initialRegion={{
-              latitude: 13.652944,
-              longitude: 100.49525,
-              latitudeDelta: 0.002,
-              longitudeDelta: 0.002,
-            }}
-            onMapReady={this.onMapLoaded.bind(this)}
-            showsUserLocation={true}>
-            {map_rendered_circle}
-          </MapView>
-        </View>
-        <View style={{height: '50%'}}>{render_awareness_location}</View>
-      </React.Fragment>
+      <View style={{flex: 1, backgroundColor: '#ffffff'}}>
+        <React.Fragment>
+          <View style={{height: '50%'}}>
+            <MapView
+              style={{flex: 1}}
+              provider={'google'}
+              ref={map => {
+                // Referencing the map
+                this.map = map;
+              }}
+              track
+              initialRegion={{
+                latitude: 13.652944,
+                longitude: 100.49525,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
+              }}
+              onMapReady={this.onMapLoaded.bind(this)}
+              showsUserLocation={true}>
+              {map_rendered_circle}
+            </MapView>
+          </View>
+          <ScrollView>
+            <View
+              style={{height: '50%', paddingHorizontal: 10, paddingTop: 10}}>
+              {render_awareness_location}
+            </View>
+          </ScrollView>
+        </React.Fragment>
+      </View>
     );
   }
 }
