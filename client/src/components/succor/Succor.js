@@ -13,13 +13,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import AddEventButton from './AddEventButton';
 import ModalPop from './ModalPop';
+import dynamicSort from '../../utils/dynamicSort';
 // ────────────────────────────────────────────────────────────────────────────────
 
 export default class Succor extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			awareness_locations: null,
+			charity_locations: null,
 			userLatitude: 0,
 			userLongitude: 0,
 			initialized: false,
@@ -27,12 +28,12 @@ export default class Succor extends Component {
 			statusBarHeight: 0
 		};
 	}
-	async getAllAwarenessData(lat, lng) {
+	async getAllCharityData(lat, lng) {
 		try {
 			const _res = await axios.post('https://covetter-api.herokuapp.com/api/succor/nearest', { lat, lng });
-			const all_awareness_data = _res.data.data;
+			const all_charity_data = _res.data.data;
 			this.setState({
-				awareness_locations: all_awareness_data,
+				charity_locations: all_charity_data,
 				initialized: true
 			});
 		} catch (error) {}
@@ -63,7 +64,7 @@ export default class Succor extends Component {
 						userLongitude: position.coords.longitude
 					});
 					if (!this.state.initialized) {
-						this.getAllAwarenessData(position.coords.latitude, position.coords.longitude);
+						this.getAllCharityData(position.coords.latitude, position.coords.longitude);
 					}
 				},
 				(error) => {
@@ -142,8 +143,8 @@ export default class Succor extends Component {
 	//
 	onCommitSuccess() {
 		const { userLatitude, userLongitude } = this.state;
-		// On commit success => fetch new nearest awareness data
-		this.getAllAwarenessData(userLatitude, userLongitude);
+		// On commit success => fetch new nearest charity data
+		this.getAllCharityData(userLatitude, userLongitude);
 		this.setModalVisible(false);
 	}
 	setModalVisible(visible) {
@@ -151,10 +152,27 @@ export default class Succor extends Component {
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
 	render() {
-		const { awareness_locations, userLatitude, userLongitude } = this.state;
-		let render_awareness_location, map_rendered_circle;
-		if (awareness_locations) {
-			render_awareness_location = awareness_locations.map((data, key) => {
+		const { charity_locations, userLatitude, userLongitude } = this.state;
+		let render_charity_location, map_rendered_circle;
+		if (charity_locations) {
+			//
+			// ─── SORTING ─────────────────────────────────────────────────────
+			//
+
+			let _staged_distance_charity_location = charity_locations;
+			charity_locations.forEach((data, index) => {
+				_staged_distance_charity_location[index].distance = distance(
+					data.position.lat,
+					data.position.lng,
+					userLatitude,
+					userLongitude
+				);
+			});
+
+			_staged_distance_charity_location.sort(dynamicSort('distance', 'asc'));
+
+			// ─────────────────────────────────────────────────────────────────
+			render_charity_location = _staged_distance_charity_location.map((data, key) => {
 				return (
 					<View
 						key={key}
@@ -231,7 +249,7 @@ export default class Succor extends Component {
 					</View>
 				);
 			});
-			map_rendered_circle = awareness_locations.map((data, key) => {
+			map_rendered_circle = charity_locations.map((data, key) => {
 				return (
 					<Circle
 						key={key}
@@ -309,7 +327,7 @@ export default class Succor extends Component {
 					</View>
 					<ScrollView>
 						<View style={{ height: '50%', paddingHorizontal: 10, paddingTop: 10 }}>
-							{render_awareness_location}
+							{render_charity_location}
 						</View>
 					</ScrollView>
 					<AddEventButton
