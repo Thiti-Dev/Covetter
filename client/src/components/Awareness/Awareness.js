@@ -13,6 +13,7 @@ import AddEventButton from './AddEventButton';
 import ModalPop from './ModalPop';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import dynamicSort from '../../utils/dynamicSort';
 // ────────────────────────────────────────────────────────────────────────────────
 
 export default class Awareness extends Component {
@@ -155,8 +156,27 @@ export default class Awareness extends Component {
 	render() {
 		const { awareness_locations, userLatitude, userLongitude } = this.state;
 		let render_awareness_location, map_rendered_circle;
+
 		if (awareness_locations) {
-			render_awareness_location = awareness_locations.map((data, key) => {
+			//
+			// ─── SORTING ─────────────────────────────────────────────────────
+			//
+
+			let _staged_distance_awareness_location = awareness_locations;
+			awareness_locations.forEach((data, index) => {
+				_staged_distance_awareness_location[index].distance = distance(
+					data.position.lat,
+					data.position.lng,
+					userLatitude,
+					userLongitude
+				);
+			});
+
+			_staged_distance_awareness_location.sort(dynamicSort('distance', 'asc'));
+
+			// ─────────────────────────────────────────────────────────────────
+
+			render_awareness_location = _staged_distance_awareness_location.map((data, key) => {
 				return (
 					<View
 						key={key}
