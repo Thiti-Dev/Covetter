@@ -158,6 +158,7 @@ exports.getNearestCharityLocationData = asyncHandler(async (req, res, next) => {
 					address: _data.address,
 					position: _data.position,
 					description: _data.description,
+					photo_url: _data.photo_url,
 					createdAt: _data.createdAt.toDate(),
 					endAt: _data.endAt.toDate()
 				};
