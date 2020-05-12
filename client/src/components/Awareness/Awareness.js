@@ -14,6 +14,10 @@ import Geolocation from 'react-native-geolocation-service';
 // ─── UTIL ───────────────────────────────────────────────────────────────────────
 //
 import distance from '../../utils/distance';
+import AddEventButton from './AddEventButton';
+import ModalPop from './ModalPop';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons';
 // ────────────────────────────────────────────────────────────────────────────────
 
 export default class Awareness extends Component {
@@ -24,6 +28,7 @@ export default class Awareness extends Component {
       userLatitude: 0,
       userLogintude: 0,
       initialized: false,
+      modalVisible: false,
     };
   }
   async getAllAwarenessData(lat, lng) {
@@ -109,7 +114,12 @@ export default class Awareness extends Component {
   componentWillUnmount = () => {
     Geolocation.clearWatch(this.locationWatchId);
   };
+
   render() {
+    console.log('Worked');
+    const setModalVisible = visible => {
+      this.setState({modalVisible: visible});
+    };
     const {awareness_locations, userLatitude, userLogintude} = this.state;
     let render_awareness_location, map_rendered_circle;
     if (awareness_locations) {
@@ -119,6 +129,7 @@ export default class Awareness extends Component {
             key={key}
             style={{
               backgroundColor: '#ffffff',
+              minHeight: 100,
               padding: 10,
               marginBottom: 10,
               borderRadius: 15,
@@ -131,19 +142,47 @@ export default class Awareness extends Component {
               shadowOpacity: 0.22,
               shadowRadius: 2.22,
 
-              elevation: 1.5,
+              elevation: 3,
             }}>
-            <Text style={{fontWeight: 'bold'}}>{data.reason}</Text>
-            <Text>
-              distance:{' '}
-              {distance(
-                userLatitude,
-                userLogintude,
-                data.position.lat,
-                data.position.lng,
-                'K',
-              )}
-            </Text>
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'Prompt-Bold',
+                  fontSize: 16,
+                  color: '#475055',
+                }}>
+                📣 {data.reason}
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  color="#e84848"
+                  style={{marginHorizontal: 10}}
+                  size={20}
+                />
+                <Text
+                  style={{
+                    fontFamily: 'Prompt-Regular',
+                    fontSize: 16,
+                    color: '#475055',
+                  }}>
+                  {distance(
+                    userLatitude,
+                    userLogintude,
+                    data.position.lat,
+                    data.position.lng,
+                    'K',
+                  )}
+                  {` Kilometer.`}
+                </Text>
+              </View>
+            </View>
           </View>
         );
       });
@@ -162,7 +201,43 @@ export default class Awareness extends Component {
     return (
       <View style={{flex: 1, backgroundColor: '#ffffff'}}>
         <React.Fragment>
-          <View style={{height: '50%'}}>
+          <View
+            style={{
+              padding: 10,
+              backgroundColor: '#ffffff',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
+
+              elevation: 5,
+            }}>
+            <Text
+              style={{
+                fontFamily: 'Prompt-Bold',
+                fontSize: 20,
+                color: '#475055',
+              }}>
+              🚀 Awareness Scanner
+            </Text>
+          </View>
+          <View
+            style={{
+              height: '30%',
+              backgroundColor: '#fff',
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
+
+              elevation: 1.5,
+            }}>
             <MapView
               style={{flex: 1}}
               provider={'google'}
@@ -188,6 +263,14 @@ export default class Awareness extends Component {
               {render_awareness_location}
             </View>
           </ScrollView>
+          <AddEventButton
+            modalVisible={this.state.modalVisible}
+            setIsVisible={setModalVisible}
+          />
+          <ModalPop
+            modalVisible={this.state.modalVisible}
+            setIsVisible={setModalVisible}
+          />
         </React.Fragment>
       </View>
     );
