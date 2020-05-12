@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import styles from './Styles';
 import {connect} from 'react-redux';
 
@@ -8,7 +8,7 @@ class Loading extends Component {
     if (this.props.loading.loadingState) {
       return (
         <View style={styles.container}>
-          <Text style={styles.textStyle}>Loading</Text>
+          <ActivityIndicator size="large" color="#37379b" />
         </View>
       );
     } else {
