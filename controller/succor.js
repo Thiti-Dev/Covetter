@@ -65,13 +65,20 @@ exports.commitCharity = asyncHandler(async (req, res, next) => {
 	const lat = parseFloat(req.body.lat);
 	const lng = parseFloat(req.body.lng);
 
-	const geo_res = await geocoder.reverse({
-		lat: lat,
-		lon: lng
-	});
+	let _address = {};
+	try {
+		const geo_res = await geocoder.reverse({
+			lat: lat,
+			lon: lng
+		});
+		// if able to get the address
+		_address.address = geo_res[0].formattedAddress;
+	} catch (error) {
+		// don't do nothing
+	}
 	const _res = await geocollection.add({
+		..._address,
 		description: req.body.description,
-		address: geo_res[0].formattedAddress,
 		photo_url: _upload_url,
 		position: {
 			lat,
