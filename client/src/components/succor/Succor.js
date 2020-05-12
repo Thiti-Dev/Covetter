@@ -32,7 +32,10 @@ export default class Succor extends Component {
       initialized: false,
       modalVisible: false,
       statusBarHeight: 0,
+      specificDetial: null,
+      isViewingModal: false,
     };
+    this.onViewLocation = this.onViewLocation.bind(this);
   }
   async getAllCharityData(lat, lng) {
     try {
@@ -166,8 +169,27 @@ export default class Succor extends Component {
     this.setState({modalVisible: visible});
   }
   // ────────────────────────────────────────────────────────────────────────────────
+
+  //
+  // ─── ON VIEW LOCATION ───────────────────────────────────────────────────────────
+  //
+  onViewLocation(location_data) {
+    this.setState({specificDetial: location_data, isViewingModal: true});
+  }
+
+  // CALLBACK
+  onHidingViewLocation() {
+    this.setState({isViewingModal: false, specificDetial: null});
+  }
+  // ────────────────────────────────────────────────────────────────────────────────
   render() {
-    const {charity_locations, userLatitude, userLongitude} = this.state;
+    const {
+      charity_locations,
+      userLatitude,
+      userLongitude,
+      isViewingModal,
+      specificDetial,
+    } = this.state;
     let render_charity_location, map_rendered_circle;
     if (charity_locations) {
       //
@@ -191,6 +213,7 @@ export default class Succor extends Component {
         (data, key) => {
           return (
             <View
+              onTouchEndCapture={() => this.onViewLocation(data)}
               key={key}
               style={{
                 backgroundColor: '#ffffff',
@@ -354,7 +377,11 @@ export default class Succor extends Component {
             on_success={this.onCommitSuccess.bind(this)}
           />
 
-          <ModalLocationDetails />
+          <ModalLocationDetails
+            is_visible={isViewingModal}
+            location_data={specificDetial}
+            on_hiding={this.onHidingViewLocation.bind(this)}
+          />
         </React.Fragment>
       </View>
     );
