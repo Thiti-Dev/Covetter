@@ -1,9 +1,18 @@
 import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#39167e',
-    width: '100%',
-    padding: 10,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+    borderRadius: 10,
   },
   headerTitile: {
     fontWeight: 'bold',
@@ -14,15 +23,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   newsCard: {
-    marginVertical: 5,
+    marginVertical: 10,
     backgroundColor: '#ffffff',
     minHeight: 200,
     maxHeight: 200,
     display: 'flex',
     flexDirection: 'row',
+
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 2,
+    borderRadius: 10,
   },
   newsCardImage: {
     flex: 1.4,
+    padding: 10,
   },
   newsCardDetails: {
     padding: 10,
@@ -30,16 +52,18 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   newsCardDetailsTitle: {
-    fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: 'Prompt-Bold',
   },
   Title: {
-    flex: 1,
+    flex: 2.5,
     padding: 2,
     overflow: 'hidden',
+    borderBottomWidth: 0.5,
   },
   Description: {
     flex: 2,
+    padding: 2,
     overflow: 'hidden',
   },
   newsImage: {
