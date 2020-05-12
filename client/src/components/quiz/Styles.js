@@ -4,23 +4,25 @@ const styles = StyleSheet.create({
   headerContainer: {
     padding: 10,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#39167e',
+    backgroundColor: '#fff',
+    elevation: 3,
   },
   headerText: {
-    fontWeight: 'bold',
     fontSize: 20,
-    color: '#ffffff',
+    fontFamily: 'Prompt-Bold',
+    color: '#475055',
   },
   routineContainer: {
     flex: 1,
-    backgroundColor: '#33d5d4',
+    backgroundColor: '#ffffff',
   },
   cardContainer: {
-    padding: 10,
+    padding: 15,
     backgroundColor: '#ffffff',
-    marginVertical: 10,
+    marginTop: 30,
+    marginBottom: 10,
     marginHorizontal: 10,
+    borderRadius: 10,
 
     shadowColor: '#000',
     shadowOffset: {
@@ -36,21 +38,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   cardNumber: {
-    backgroundColor: '#39167e',
+    position: 'absolute',
+    top: -30,
+    backgroundColor: '#5bb86a',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    margin: 10,
   },
   cardQuizStyle: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#ededed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
   },
   cardButton: {
     flexDirection: 'row',
-
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -59,10 +65,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   buttonCreateStyle: {
+    marginTop: 20,
     paddingVertical: 10,
-    backgroundColor: '#ededed',
     justifyContent: 'center',
     alignItems: 'center',
+    elevation: 2,
+    borderRadius: 10,
   },
 });
 
