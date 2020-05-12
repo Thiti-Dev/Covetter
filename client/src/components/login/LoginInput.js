@@ -24,8 +24,7 @@ class LoginInput extends Component {
     this.state = {
       email: '',
       password: '',
-      emailError: null,
-      passwordError: null,
+      isErrors: {emailError: null, passwordError: null},
     };
   }
   render() {
@@ -33,13 +32,28 @@ class LoginInput extends Component {
 
     //
     // ─── ON BUTTON CLICK ─────────────────────────────────────────────
-    const onSubmitHandler = () => {
+    const onSubmitHandler = async () => {
+      let errors = {};
       this.props.loadingAction(true);
-      Auth(email, password).then(res => {
-        console.log(res);
-        this.props.setAuthenticated(true);
-        this.props.loadingAction(false);
-      });
+      await Auth(email, password)
+        .then(res => {
+          console.log(res);
+          this.props.setAuthenticated(true);
+          this.props.loadingAction(false);
+        })
+        .catch(err => {
+          console.log(err);
+          if (err.code === 'auth/invalid-email')
+            errors = {...errors, emailError: 'Invalid email'};
+          else if (err.code === 'auth/user-not-found')
+            errors = {...errors, emailError: 'User not found'};
+
+          if (err.code === 'auth/wrong-password')
+            errors = {...errors, passwordError: 'Wrong password'};
+          this.props.loadingAction(false);
+        });
+
+      this.setState({isErrors: errors});
     };
     // ─────────────────────────────────────────────────────────────────
 
@@ -59,6 +73,7 @@ class LoginInput extends Component {
               colors={['#6846ff', '#56ffd5']}
               style={styles.linearGradient}>
               <TextInput
+                keyboardType="email-address"
                 style={styles.inputStyle}
                 placeholder="Email Address"
                 value={this.state.email}
@@ -66,7 +81,14 @@ class LoginInput extends Component {
               />
             </LinearGradient>
           </View>
-          <Text>{this.state.emailError}</Text>
+          <Text
+            style={{
+              color: 'red',
+              fontFamily: 'Prompt-Regular',
+              textAlign: 'right',
+            }}>
+            {this.state.isErrors.emailError}
+          </Text>
           <View style={styles.formInput}>
             <LinearGradient
               start={{x: 0, y: 0}}
@@ -74,6 +96,7 @@ class LoginInput extends Component {
               colors={['#6846ff', '#56ffd5']}
               style={styles.linearGradient}>
               <TextInput
+                secureTextEntry={true}
                 style={styles.inputStyle}
                 placeholder="Password"
                 value={this.state.password}
@@ -81,7 +104,14 @@ class LoginInput extends Component {
               />
             </LinearGradient>
           </View>
-          <Text>{this.state.passwordError}</Text>
+          <Text
+            style={{
+              color: 'red',
+              fontFamily: 'Prompt-Regular',
+              textAlign: 'right',
+            }}>
+            {this.state.isErrors.passwordError}
+          </Text>
         </View>
         <View
           style={{
