@@ -3,6 +3,8 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const formattedLog = require('../utils/formatted-log');
 
+const moment = require('moment');
+
 //
 // ─── FIREBASE DB ────────────────────────────────────────────────────────────────
 //
@@ -50,7 +52,7 @@ exports.commitCharity = asyncHandler(async (req, res, next) => {
 	//
 
 	if (!req.file) {
-		return next(new ErrorResponse(`Please upload a file`, 400));
+		return next(new ErrorResponse(`Please upload a photo`, 400));
 	}
 
 	const file = req.file;
@@ -60,6 +62,26 @@ exports.commitCharity = asyncHandler(async (req, res, next) => {
 		return next(new ErrorResponse(`Please upload an image file`, 400));
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
+	//
+	// ─── CHECK IF THE HOUR WAS RIGHT AND WAS PASSED ────────────────────────────────────────────────
+	//
+	let _estimated_end_date;
+	if (req.body.estimated_hour) {
+		const hour = parseInt(req.body.estimated_hour);
+		if (!hour) {
+			return next(new ErrorResponse(`estimated_hour should be in number or string of number`, 400));
+		}
+		if (hour < 1 || hour > 24) {
+			return next(
+				new ErrorResponse(`estimated_hour mustn't not less than 1 hour and mustn't more than 24 hours`, 400)
+			);
+		}
+		_estimated_end_date = moment().add(hour, 'hours').toDate();
+	} else {
+		return next(new ErrorResponse(`estimated_hour should be specified`, 400));
+	}
+	// ────────────────────────────────────────────────────────────────────────────────
+
 	const _upload_url = await uploadPhotoToStorage(req.file, 'images');
 
 	const lat = parseFloat(req.body.lat);
@@ -86,7 +108,7 @@ exports.commitCharity = asyncHandler(async (req, res, next) => {
 		},
 		coordinates: new admin.firestore.GeoPoint(lat, lng),
 		createdAt: FieldValue.serverTimestamp(),
-		endAt: admin.firestore.Timestamp.fromDate(new Date(req.body.endAt))
+		endAt: admin.firestore.Timestamp.fromDate(_estimated_end_date)
 	});
 	res.status(200).json({ sucess: true, data: _res.id });
 });
