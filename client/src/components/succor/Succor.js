@@ -221,7 +221,7 @@ export default class Succor extends Component {
                   resizeMode="cover"
                 />
               </View>
-              <View style={{padding: 10}}>
+              <View style={{padding: 10, flex: 1}}>
                 <Text
                   style={{
                     fontFamily: 'Prompt-Bold',

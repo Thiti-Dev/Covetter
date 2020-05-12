@@ -6,7 +6,7 @@ export default class ModalLocationDetails extends Component {
   constructor(params) {
     super();
     this.state = {
-      isVisible: true,
+      isVisible: false,
     };
   }
   render() {
