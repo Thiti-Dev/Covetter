@@ -79,14 +79,19 @@ exports.commitNewAwarenessData = asyncHandler(async (req, res, next) => {
 		}
 	}
 	// ────────────────────────────────────────────────────────────────────────────────
-
-	const geo_res = await geocoder.reverse({
-		lat: staged_awareness_data.position.lat,
-		lon: staged_awareness_data.position.lng
-	});
+	try {
+		const geo_res = await geocoder.reverse({
+			lat: staged_awareness_data.position.lat,
+			lon: staged_awareness_data.position.lng
+		});
+		// if able to get the address
+		staged_awareness_data.address = geo_res[0].formattedAddress;
+	} catch (error) {
+		// don't do nothing
+	}
 	const _res = await geocollection.add({
 		...staged_awareness_data,
-		address: geo_res[0].formattedAddress,
+		//address: geo_res[0].formattedAddress,
 		coordinates: new admin.firestore.GeoPoint(
 			staged_awareness_data.position.lat,
 			staged_awareness_data.position.lng
