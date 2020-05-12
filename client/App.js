@@ -12,6 +12,7 @@ import {
   faTasks,
   faRadiation,
   faBullhorn,
+  faColumns,
 } from '@fortawesome/free-solid-svg-icons';
 import {faUser, faNewspaper} from '@fortawesome/free-regular-svg-icons';
 
@@ -120,7 +121,7 @@ const appStack = (
           let iconColor;
 
           if (route.name === 'Map') {
-            iconName = faMapMarkedAlt;
+            iconName = faColumns;
             iconColor = focused ? '#39167e' : 'gray';
           } else if (route.name === 'News') {
             iconName = faNewspaper;
@@ -148,8 +149,6 @@ const appStack = (
         inactiveTintColor: 'gray',
         showLabel: false,
         style: {
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
           height: (windowHeight * 8) / 100,
         },
       }}>
