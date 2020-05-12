@@ -6,7 +6,7 @@ export default class QuizHeader extends Component {
   render() {
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}> Routine Quiz </Text>
+        <Text style={styles.headerText}>☘️ Routine Quiz </Text>
       </View>
     );
   }
