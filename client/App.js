@@ -54,6 +54,13 @@ import 'moment-timezone';
 // ────────────────────────────────────────────────────────────────────────────────
 
 //
+// ─── PUSH NOTIFICATION ──────────────────────────────────────────────────────────
+//
+import PushNotification from 'react-native-push-notification';
+import * as pushNotification from './src/utils/notification-util';
+// ────────────────────────────────────────────────────────────────────────────────
+
+//
 // ─── AXIOS DEFAULT SETTING ──────────────────────────────────────────────────────
 //
 let axiosDefaults = require('axios/lib/defaults');
@@ -166,6 +173,12 @@ export default class App extends Component {
 		this.state = {
 			isAuthenticated: false
 		};
+
+		//
+		// ─── INITIALIZE THE PUSH NOTIFICATION ────────────────────────────
+		//
+		pushNotification.configure();
+		// ─────────────────────────────────────────────────────────────────
 	}
 	componentDidMount() {
 		store.dispatch(loadingAction(true));
