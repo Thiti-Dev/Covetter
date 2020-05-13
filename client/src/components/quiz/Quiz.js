@@ -74,6 +74,32 @@ export default class Quiz extends Component {
 
 				// • • • • •
 
+				// MAPPING TIME EXACT
+				var morning_date = moment().startOf('day').toDate();
+				morning_date.setHours(6);
+				morning_date.setMinutes(0);
+				morning_date.setSeconds(0);
+				morning_date.setMilliseconds(0);
+
+				var midday_date = moment().startOf('day').toDate();
+				midday_date.setHours(12);
+				midday_date.setMinutes(0);
+				midday_date.setSeconds(0);
+				midday_date.setMilliseconds(0);
+
+				var evening_date = moment().startOf('day').toDate();
+				evening_date.setHours(18);
+				evening_date.setMinutes(0);
+				evening_date.setSeconds(0);
+				evening_date.setMilliseconds(0);
+
+				const today_date_now = new Date();
+
+				/*console.log(typeof morning_date);
+				console.log(typeof today_date_now);
+				console.log(midday_date);
+				console.log(evening_date);*/
+
 				// Render phase
 				let did_morning_routine, did_midday_routine, did_evening_routine;
 				routines.forEach((data, index) => {
@@ -103,9 +129,9 @@ export default class Quiz extends Component {
 						routines: [ ...prevState.routines, EVENING_QUESTION ]
 					}));
 				}
-				console.log('[morning]: ' + is_today_morning_stamp);
+				/*console.log('[morning]: ' + is_today_morning_stamp);
 				console.log('[midday]: ' + is_today_midday_stamp);
-				console.log('[evening]: ' + is_today_evening_stamp);
+				console.log('[evening]: ' + is_today_evening_stamp);*/
 				// • • • • •
 			}, UPDATE_INTERVAL_MS);
 
