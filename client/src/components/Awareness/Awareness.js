@@ -16,6 +16,12 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import dynamicSort from '../../utils/dynamicSort';
 // ────────────────────────────────────────────────────────────────────────────────
 
+//
+// ─── CONSTANTS ──────────────────────────────────────────────────────────────────
+//
+const FETCH_TIMER_MS = 10 * 1000; // 10 seconds for testing
+// ────────────────────────────────────────────────────────────────────────────────
+
 export default class Awareness extends Component {
 	constructor(props) {
 		super(props);
@@ -27,6 +33,7 @@ export default class Awareness extends Component {
 			modalVisible: false,
 			statusBarHeight: 0
 		};
+		this.fetch_interval = undefined;
 	}
 	async getAllAwarenessData(lat, lng) {
 		try {
@@ -78,6 +85,24 @@ export default class Awareness extends Component {
 			this.followUserLocation();
 		}, 2000);
 	}
+
+	initializeFetchInterval() {
+		console.log('[AWARENESS][INTERLVAL ID]: ' + this.fetch_interval);
+
+		// If not yet initialized
+		if (!this.fetch_interval) {
+			this.fetch_interval = setInterval(() => {
+				const { userLatitude, userLongitude } = this.state;
+				if (userLatitude !== 0 && userLongitude !== 0) {
+					this.getAllAwarenessData(userLatitude, userLongitude);
+				}
+				console.log('[Awareness]: Fetch nearest locations');
+			}, FETCH_TIMER_MS);
+
+			console.log('[AWARENESS][INTERLVAL ID][ASSIGN]: ' + this.fetch_interval);
+		}
+	}
+
 	componentDidMount() {
 		// Fixed showMyLocationButton for react-native-maps problem on some devices
 		setTimeout(() => this.setState({ statusBarHeight: 2 }), 500); // DO NOT DELETE
@@ -114,12 +139,30 @@ export default class Awareness extends Component {
 		//
 		this.focusListener = this.props.navigation.addListener('focus', () => {
 			this.followUserLocation();
+			this.initializeFetchInterval(); // inititalize timer again
 		});
+
+		this.blurListener = this.props.navigation.addListener('blur', () => {
+			// When out of focus
+			console.log('out of focus : ' + this.props.route.name);
+			clearInterval(this.fetch_interval); // clear fetch interval ( reduce lag )
+			this.fetch_interval = undefined;
+		});
+		// ─────────────────────────────────────────────────────────────────
+
+		//
+		// ─── FETCHING INTERVAL ───────────────────────────────────────────
+		//
+		this.fetch_interval = undefined; // Fixed Random - intervalnumber appear at first
+		this.initializeFetchInterval(); // initialize on didmount
 		// ─────────────────────────────────────────────────────────────────
 	}
 	componentWillUnmount = () => {
 		Geolocation.clearWatch(this.locationWatchId);
 		this.focusListener(); // clearing the event
+		this.blurListener(); // clearing the event
+		clearInterval(this.fetch_interval);
+		this.fetch_interval = undefined;
 	};
 
 	//
